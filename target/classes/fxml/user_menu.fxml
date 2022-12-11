@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="568.0" style="             -fx-background-color: #dbf3fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kasperovich.javafxapp.controller.UserController">
+   <children>
+      <AnchorPane layoutX="148.0" layoutY="1.0" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: #fff;">
+         <children>
+            <AnchorPane fx:id="organizationsPane" prefHeight="400.0" prefWidth="425.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ListView fx:id="listOfOrg" layoutX="72.0" layoutY="37.0" prefHeight="292.0" prefWidth="282.0" />
+                  <Button fx:id="addOrgBtn" layoutX="276.0" layoutY="346.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="78.0" text="Добавить" />
+                  <Label fx:id="noOrgInfo" alignment="CENTER" layoutX="71.0" layoutY="86.0" prefHeight="143.0" prefWidth="282.0" text="У вас нет ни одной организации" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="addOrgPane" layoutX="7.0" prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextField fx:id="orgTypeField" layoutX="109.0" layoutY="42.0" prefHeight="27.0" prefWidth="215.0" promptText="Тип(ООО, ЗАО. ОАО. ИП. УП. ПАО)" />
+                        <TextField fx:id="orgNameField" layoutX="109.0" layoutY="92.0" prefHeight="27.0" prefWidth="215.0" promptText="Название" />
+                        <TextField fx:id="emplNumberField" layoutX="109.0" layoutY="144.0" prefHeight="27.0" prefWidth="215.0" promptText="Кол-во сотрудников" />
+                        <Button fx:id="submitAdd" layoutX="175.0" layoutY="207.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" text="Добавить" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="profile" layoutX="-1.0" prefHeight="400.0" prefWidth="420.0">
+               <children>
+                  <Label fx:id="userNameAndSurname" alignment="CENTER" layoutY="29.0" prefHeight="35.0" prefWidth="338.0" style="-fx-font-weight: bold;" textAlignment="CENTER">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="userEmail" layoutX="61.0" layoutY="84.0" prefHeight="17.0" prefWidth="199.0" style="-fx-background-color: #dbf3fa;" />
+                  <Label fx:id="userRole" layoutX="61.0" layoutY="117.0" prefHeight="17.0" prefWidth="199.0" style="-fx-background-color: #dbf3fa;" />
+                  <Button fx:id="editData" layoutX="153.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="108.0" text="Редактировать" />
+                  <TextField fx:id="editEmail" layoutX="61.0" layoutY="80.0" prefHeight="25.0" prefWidth="199.0" />
+                  <TextField fx:id="editName" layoutY="29.0" prefHeight="35.0" prefWidth="338.0" />
+                  <Button fx:id="saveChangesBtn" layoutX="75.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="157.0" text="Изменить" />
+                  <Hyperlink fx:id="changePasswordLink" layoutX="26.0" layoutY="247.0" text="Сменить пароль" underline="true" />
+                  <AnchorPane fx:id="changePasswordPane" layoutX="-5.0" layoutY="-3.0" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <PasswordField fx:id="oldPasswordField" layoutX="121.0" layoutY="63.0" prefHeight="25.0" prefWidth="199.0" promptText="Старый пароль" />
+                        <PasswordField fx:id="newPasswordField" layoutX="121.0" layoutY="111.0" prefHeight="25.0" prefWidth="199.0" promptText="Новый пароль" />
+                        <Button fx:id="savePasswordBtn" layoutX="154.0" layoutY="158.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="143.0" text="Сохранить изменения" />
+                        <Label fx:id="resOfChangePassword" alignment="CENTER" layoutX="52.0" layoutY="219.0" prefHeight="27.0" prefWidth="338.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="finishPasswordChange" layoutX="175.0" layoutY="259.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <Button fx:id="logOutBtn" layoutX="50.0" layoutY="345.0" mnemonicParsing="false" text="Выйти" />
+      <Label fx:id="userPreview" alignment="CENTER" layoutX="15.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" style="-fx-font-weight: bold;" />
+      <Button fx:id="showProfileBtn" layoutX="8.0" layoutY="59.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мой профиль" />
+      <Button fx:id="showMyOrgBtn" layoutX="9.0" layoutY="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мои организации" />
+      <Button fx:id="top10Btn" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="ТОП 10" />
+   </children>
+</AnchorPane>

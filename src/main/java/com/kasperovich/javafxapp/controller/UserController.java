@@ -206,10 +206,14 @@ public class UserController implements Initializable {
             organizationsPane.setVisible(true);
             addOrgPane.setVisible(false);
             try(OrgRepository orgRepository=new OrgRepoImpl()){
+                List<Integer>numbers=new ArrayList<>();
+                for(int i=1;i<=orgRepository.findNumberOfOrgsOfUser(user.getId());i++){
+                    numbers.add(i);
+                }
                 List<Organization>orgList=orgRepository.findAllByUserId(user.getId());
                 ObservableList<String>orgListItems=FXCollections.observableList(orgList
                         .stream()
-                        .map(x->x.getId()+". "+x.getType().toString()+' '+x.getName())
+                        .map(x->numbers.get(orgList.indexOf(x))+". "+x.getType().toString()+' '+x.getName())
                         .collect(Collectors.toList()));
                 listOfOrg.setItems(orgListItems);
                 addOrgBtn.setOnAction(event1 -> addOrganization(event,orgRepository,orgListItems));
@@ -261,13 +265,17 @@ public class UserController implements Initializable {
             organization.setUserId(user.getId());
             orgRepository.create(organization);
             addOrgPane.setVisible(false);
-            String lastId=
-                    observableList
-                            .get(observableList.size()-1)
-                            .substring(0,observableList.get(observableList.size()-1).indexOf("."));
-            int id=Integer.parseInt(lastId)+1;
-            observableList.add(id+". "+organization.getType()+' '+organization.getName());
+            String lastNumber=new String();
+            if(!observableList.isEmpty()){
+                lastNumber=observableList
+                        .get(observableList.size()-1)
+                        .substring(0,observableList.get(observableList.size()-1).indexOf("."));
+            }
+            else lastNumber="0";
+            int number=Integer.parseInt(lastNumber)+1;
+            observableList.add(number+". "+organization.getType()+' '+organization.getName());
             listOfOrg.setItems(observableList);
+            noOrgInfo.setVisible(false);
             }
         );
     }
