@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kasperovich.javafxapp.controller.AdminController">
+   <children>
+      <AnchorPane layoutX="151.0" layoutY="1.0" prefHeight="400.0" prefWidth="447.0" style="-fx-background-color: #fff;">
+         <children>
+            <ListView prefHeight="401.0" prefWidth="448.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <AnchorPane layoutX="144.0" prefHeight="393.0" prefWidth="442.0">
+               <children>
+                  <ListView fx:id="usersList" layoutY="-7.0" prefHeight="401.0" prefWidth="448.0" style="-fx-background-color: #fafafa" />
+                  <AnchorPane fx:id="userData" layoutX="71.0" layoutY="63.0" prefHeight="268.0" prefWidth="338.0">
+                     <children>
+                        <Label fx:id="userNameAndSurname" alignment="CENTER" layoutY="29.0" prefHeight="35.0" prefWidth="338.0" style="-fx-font-weight: bold;" textAlignment="CENTER">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="userEmail" layoutX="61.0" layoutY="84.0" prefHeight="17.0" prefWidth="199.0" style="-fx-background-color: #dbf3fa;" />
+                        <Label fx:id="userRole" layoutX="61.0" layoutY="117.0" prefHeight="17.0" prefWidth="199.0" style="-fx-background-color: #dbf3fa;" />
+                        <Label fx:id="userCreated" layoutX="61.0" layoutY="186.0" prefHeight="17.0" prefWidth="199.0" style="-fx-background-color: #dbf3fa;" />
+                        <Label layoutX="61.0" layoutY="161.0" prefHeight="25.0" prefWidth="119.0" text="Дата регистрации:">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="backToListOfUsers" layoutX="273.0" layoutY="242.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Назад" />
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
+            <Button fx:id="showUsersBtn" layoutX="14.0" layoutY="101.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Пользователи" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="logoutBtn" mnemonicParsing="false" text="Выйти" />
+   </children>
+</AnchorPane>
