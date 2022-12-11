@@ -1,2 +1,19 @@
 
 `	java:S112_"FDefine and throw a dedicated exception instead of using a generic one.(¯åÕøÿÿÿÿ
+S
+java:S1128
+"6Remove this unused import 'javafx.event.EventHandler'.(º»û˜8ûõõÏ0
+K
+java:S1128".Remove this unused import 'javafx.scene.Node'.(ÑÖ¬ï8ûõõÏ0
+T
+java:S1128"7Remove this unused import 'javafx.scene.input.KeyCode'.(ûÊ¢¶8ûõõÏ0
+Z
+java:S1128"8Remove this unused import 'javafx.scene.input.KeyEvent'.(¦¶ Æøÿÿÿÿ8ûõõÏ0
+\
+java:S1128":Remove this unused import 'javafx.scene.input.MouseEvent'.(˜¬‹æÿÿÿÿÿ8üõõÏ0
+]
+java:S1128";Remove this unused import 'lombok.RequiredArgsConstructor'.(ÑØúøÿÿÿÿ8üõõÏ0
+R
+java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8üõõÏ0
+K
+java:S1128".Remove this unused import 'java.util.Objects'.(¼¸õ›8üõõÏ0

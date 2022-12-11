@@ -171,8 +171,8 @@ public class OrgRepoImpl implements OrgRepository{
             connection=DBPropertiesReader.getConnection();
             statement= connection.createStatement();
             rs=statement.executeQuery(findNumberQuery);
-            result = rs.getLong("user_id");
-            return result;
+            rs.next();
+            return rs.getLong("count");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
