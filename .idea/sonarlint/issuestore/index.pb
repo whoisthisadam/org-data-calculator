@@ -3,12 +3,8 @@ w
 G.idea/sonarlint/issuestore/b/5/b5b74c61c33136f116f253e1495bfa57dd3b3bff,f\7\f7ad044aea0320d250aa145aba52b4df1ee9e7ae
 w
 G.idea/sonarlint/issuestore/9/a/9a8fb1d2e4191d03b4737753584958d9b35b5dc5,9\d\9da76c01618d9493496fb910c8066d5860d28ba2
-w
-Gsrc/main/java/com/kasperovich/javafxapp/controller/AdminController.java,9\e\9e5bfec08ec8346aa10d73209ee41f53effdcd04
 m
 =src/main/java/com/kasperovich/javafxapp/util/ChangeScene.java,7\6\769a8331924cbeb66cea0ea4ff7caa738faeaad8
-z
-Jsrc/main/java/com/kasperovich/javafxapp/controller/CongratsController.java,b\5\b5b74c61c33136f116f253e1495bfa57dd3b3bff
 v
 Fsrc/main/java/com/kasperovich/javafxapp/repository/CRUDRepository.java,0\c\0c8b4ff0401d5de05ca412b0f94da98f30866786
 t
