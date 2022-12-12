@@ -25,8 +25,6 @@ h
 8src/main/java/com/kasperovich/javafxapp/domain/User.java,e\7\e78b958804c1b238c4d61fe2c59c0b7820cc6826
 }
 Msrc/main/java/com/kasperovich/javafxapp/repository/user/UserTableColumns.java,2\3\23cab163cbadfbbca39b610e2c2f587272fd047d
-p
-@src/main/java/com/kasperovich/javafxapp/domain/Organization.java,4\f\4f4e4cb93678a7ec3803c10012d4e721f8133c57
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 d

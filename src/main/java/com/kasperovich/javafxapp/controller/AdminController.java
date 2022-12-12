@@ -2,6 +2,8 @@ package com.kasperovich.javafxapp.controller;
 
 import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
+import com.kasperovich.javafxapp.repository.organization.OrgRepoImpl;
+import com.kasperovich.javafxapp.repository.organization.OrgRepository;
 import com.kasperovich.javafxapp.repository.role.RoleRepoImpl;
 import com.kasperovich.javafxapp.repository.role.RoleRepository;
 import com.kasperovich.javafxapp.repository.user.UserRepoImpl;
@@ -22,7 +24,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,10 +34,9 @@ import java.util.stream.Collectors;
 public class AdminController implements Initializable {
 
     @FXML
-    public AnchorPane userData;
+    public AnchorPane userDataPane;
     @FXML
     public Label userNameAndSurname;
-
     @FXML
     public Label userEmail;
     @FXML
@@ -47,6 +47,14 @@ public class AdminController implements Initializable {
     public Button backToListOfUsers;
     @FXML
     public Button adminToUsersBtn;
+    @FXML
+    public AnchorPane showOrgsPane;
+    @FXML
+    public ListView<String> orgsList;
+    @FXML
+    public Button showOrgsBtn;
+    @FXML
+    public AnchorPane usersPane;
     @FXML
     private Button showUsersBtn;
 
@@ -60,12 +68,13 @@ public class AdminController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        userData.setVisible(false);
-        usersList.setVisible(false);
+        userDataPane.setVisible(false);
         logoutBtn.setOnAction(event -> ChangeScene.changeScene(event,"/fxml/login_form.fxml", "User login"));
         showUsersBtn.setOnAction(this::onUsersCLicked);
         usersList.setOnMouseClicked(this::onUserClicked);
         adminToUsersBtn.setOnAction(this::switchToUser);
+        showOrgsPane.setVisible(false);
+        showOrgsBtn.setOnAction(this::showOrgs);
     }
 
     public void initAdmin(User user){
@@ -73,28 +82,29 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    public void onUsersCLicked(ActionEvent event){
-        if(!usersList.isVisible()){
-            List<User>users=new UserRepoImpl().findAll(null,0);
-            ObservableList<String>observableList= FXCollections.observableList(
+    public void onUsersCLicked(ActionEvent event) {
+        if (showOrgsPane.isVisible()) showOrgsPane.setVisible(false);
+        if (!usersPane.isVisible()) {
+            usersPane.setVisible(true);
+            List<User> users = new UserRepoImpl().findAll(null, 0);
+            ObservableList<String> observableList = FXCollections.observableList(
                     new ArrayList<>(
                             users
-                            .stream()
-                            .map(x-> x.getId() + ". " + x.getEmail())
-                            .collect(Collectors.toList())
+                                    .stream()
+                                    .map(x -> x.getId() + ". " + x.getEmail())
+                                    .collect(Collectors.toList())
                     )
             );
             usersList.setItems(observableList);
-            usersList.setVisible(true);
-        }
-        else {
-            usersList.setVisible(false);
+//            usersList.setVisible(true);
+
+        } else {
+            usersPane.setVisible(false);
         }
     }
 
     public void onUserClicked(MouseEvent event){
-        usersList.setVisible(false);
-        userData.setVisible(true);
+        userDataPane.setVisible(true);
         StringBuilder idStr= new StringBuilder(new String());
         String selected=usersList.getSelectionModel().getSelectedItem();
         for(int i=0;i<selected.indexOf(".");i++){
@@ -118,12 +128,9 @@ public class AdminController implements Initializable {
         catch (Exception e){
             throw new RuntimeException(e);
         }
-        backToListOfUsers.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                userData.setVisible(false);
-                usersList.setVisible(true);
-            }
+        backToListOfUsers.setOnAction(event1 -> {
+            userDataPane.setVisible(false);
+            usersList.setVisible(true);
         });
     }
 
@@ -141,6 +148,35 @@ public class AdminController implements Initializable {
         stage.setTitle("Menu");
         stage.setScene(new Scene(root, 800, 500));
         stage.show();
+    }
+
+    public void setListOfOrgs(ActionEvent event){
+        try (
+                OrgRepository orgRepository=new OrgRepoImpl();
+                UserRepository userRepository=new UserRepoImpl()
+        )
+        {
+            List<String>list=orgRepository.findAll(null, 0).stream().map(
+                    x->x.getId()+' '+x.getType().toString()+' '+x.getName()+'('+userRepository.findById(x.getUserId()).getEmail()+')'
+            ).collect(Collectors.toList());
+            ObservableList<String>orgListItems=FXCollections.observableList(list);
+            orgsList.setItems(orgListItems);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void showOrgs(ActionEvent event){
+        if(usersPane.isVisible())usersPane.setVisible(false);
+        if (userDataPane.isVisible()) userDataPane.setVisible(false);
+        if(!showOrgsPane.isVisible()){
+            showOrgsPane.setVisible(true);
+            setListOfOrgs(event);
+            orgsList.setVisible(true);
+        }
+        else{
+            showOrgsPane.setVisible(false);
+        }
     }
 }
 
