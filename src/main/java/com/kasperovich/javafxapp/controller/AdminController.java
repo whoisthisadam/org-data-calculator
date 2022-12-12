@@ -157,7 +157,7 @@ public class AdminController implements Initializable {
         )
         {
             List<String>list=orgRepository.findAll(null, 0).stream().map(
-                    x->x.getId()+' '+x.getType().toString()+' '+x.getName()+'('+userRepository.findById(x.getUserId()).getEmail()+')'
+                    x->x.getId().toString()+". "+x.getType().toString()+' '+x.getName()+'('+userRepository.findById(x.getUserId()).getEmail()+')'
             ).collect(Collectors.toList());
             ObservableList<String>orgListItems=FXCollections.observableList(list);
             orgsList.setItems(orgListItems);
