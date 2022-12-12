@@ -5,8 +5,10 @@ import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.domain.enums.OrgType;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
 import com.kasperovich.javafxapp.exception.RecurringEmailException;
+import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.repository.user.UserTableColumns;
 import com.kasperovich.javafxapp.util.DBPropertiesReader;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -78,7 +80,7 @@ public class OrgRepoImpl implements OrgRepository{
     }
 
     @Override
-    public Organization create(Organization object) {
+    public Organization create(Organization object) throws RecurringOrgNameException {
         final String insertQuery =
                 "insert into testjfx.organizations (type, name, employees_amount, creation_date, modification_date, user_id, is_deleted) " +
                         " values (?, ?, ?, ?, ?, ?, ?);";
@@ -112,7 +114,7 @@ public class OrgRepoImpl implements OrgRepository{
             return findById(userLastInsertId);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-            throw new RuntimeException(e);
+            throw new RecurringOrgNameException("This user already created organization with this name", 409);
         }
     }
 
@@ -161,7 +163,8 @@ public class OrgRepoImpl implements OrgRepository{
     public Long findNumberOfOrgsOfUser(Long userId) {
         final String findNumberQuery="select count(organizations)" +
                 "from testjfx.organizations" +
-                " where organizations.user_id="+userId;
+                " where organizations.user_id="+userId
+                +" and is_deleted=false";
         Long result;
         Connection connection;
         Statement statement;

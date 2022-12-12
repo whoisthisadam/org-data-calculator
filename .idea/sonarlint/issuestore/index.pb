@@ -1,12 +1,8 @@
 
 w
 G.idea/sonarlint/issuestore/b/5/b5b74c61c33136f116f253e1495bfa57dd3b3bff,f\7\f7ad044aea0320d250aa145aba52b4df1ee9e7ae
-w
-G.idea/sonarlint/issuestore/9/a/9a8fb1d2e4191d03b4737753584958d9b35b5dc5,9\d\9da76c01618d9493496fb910c8066d5860d28ba2
 m
 =src/main/java/com/kasperovich/javafxapp/util/ChangeScene.java,7\6\769a8331924cbeb66cea0ea4ff7caa738faeaad8
-v
-Fsrc/main/java/com/kasperovich/javafxapp/repository/CRUDRepository.java,0\c\0c8b4ff0401d5de05ca412b0f94da98f30866786
 t
 Dsrc/main/java/com/kasperovich/javafxapp/util/DBPropertiesReader.java,2\a\2a3147c19f7609d309bfd00c3930a02ad08badb3
 w
@@ -17,10 +13,6 @@ i
 Tsrc/main/java/com/kasperovich/javafxapp/repository/organization/OrgTableColumns.java,c\6\c6572eab6a95e1367a001e6ff1ad6667ce9a4e70
 q
 Asrc/main/java/com/kasperovich/javafxapp/domain/enums/OrgType.java,9\0\90e13853319d7d5e7c4af22f820c00f5539d9d53
-~
-Nsrc/main/java/com/kasperovich/javafxapp/exception/RecurringEmailException.java,8\f\8f98328126c244373b7f55238bcd4adb6c213be1
-~
-Nsrc/main/java/com/kasperovich/javafxapp/controller/RegistrationController.java,3\d\3dba8b2771425cdab221ccbdf5a1b20d538ea978
 h
 8src/main/java/com/kasperovich/javafxapp/domain/Role.java,1\8\18d90ac198a52d78a809af52af7acf447ba01781
 y
@@ -35,3 +27,16 @@ h
 8src/main/java/com/kasperovich/javafxapp/domain/User.java,e\7\e78b958804c1b238c4d61fe2c59c0b7820cc6826
 }
 Msrc/main/java/com/kasperovich/javafxapp/repository/user/UserTableColumns.java,2\3\23cab163cbadfbbca39b610e2c2f587272fd047d
+p
+@src/main/java/com/kasperovich/javafxapp/domain/Organization.java,4\f\4f4e4cb93678a7ec3803c10012d4e721f8133c57
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+w
+Gsrc/main/java/com/kasperovich/javafxapp/controller/AdminController.java,9\e\9e5bfec08ec8346aa10d73209ee41f53effdcd04
+7
+pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+d
+4src/main/java/com/kasperovich/javafxapp/MainApp.java,e\0\e0aa5a2f1a41078ca6d044975f55e3a278afa48a
+z
+Jsrc/main/java/com/kasperovich/javafxapp/controller/CongratsController.java,b\5\b5b74c61c33136f116f253e1495bfa57dd3b3bff

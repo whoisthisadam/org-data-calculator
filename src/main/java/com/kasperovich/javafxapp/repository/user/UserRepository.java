@@ -1,6 +1,7 @@
 package com.kasperovich.javafxapp.repository.user;
 
 import com.kasperovich.javafxapp.domain.User;
+import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.repository.CRUDRepository;
 
 public interface UserRepository extends CRUDRepository<Long, User>, AutoCloseable {
@@ -11,5 +12,4 @@ public interface UserRepository extends CRUDRepository<Long, User>, AutoCloseabl
     User updatePassword(Long id, String password);
 
     User updateNamesAndEmail(Long id, String firstName, String lastName, String email);
-
 }

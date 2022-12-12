@@ -4,6 +4,7 @@ import com.kasperovich.javafxapp.domain.Organization;
 import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.domain.enums.OrgType;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
+import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.repository.organization.OrgRepoImpl;
 import com.kasperovich.javafxapp.repository.organization.OrgRepository;
 import com.kasperovich.javafxapp.repository.role.RoleRepoImpl;
@@ -12,12 +13,15 @@ import com.kasperovich.javafxapp.repository.user.UserRepoImpl;
 import com.kasperovich.javafxapp.repository.user.UserRepository;
 import com.kasperovich.javafxapp.util.ChangeScene;
 import com.kasperovich.javafxapp.util.Options;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.stage.Window;
@@ -111,6 +115,7 @@ public class UserController implements Initializable {
         changePasswordLink.setOnAction(this::changePassword);
         organizationsPane.setVisible(false);
         showMyOrgBtn.setOnAction(this::organizations);
+        setContextMenu(listOfOrg);
     }
 
     public void initUser(User u){
@@ -206,16 +211,8 @@ public class UserController implements Initializable {
             organizationsPane.setVisible(true);
             addOrgPane.setVisible(false);
             try(OrgRepository orgRepository=new OrgRepoImpl()){
-                List<Integer>numbers=new ArrayList<>();
-                for(int i=1;i<=orgRepository.findNumberOfOrgsOfUser(user.getId());i++){
-                    numbers.add(i);
-                }
-                List<Organization>orgList=orgRepository.findAllByUserId(user.getId());
-                ObservableList<String>orgListItems=FXCollections.observableList(orgList
-                        .stream()
-                        .map(x->numbers.get(orgList.indexOf(x))+". "+x.getType().toString()+' '+x.getName())
-                        .collect(Collectors.toList()));
-                listOfOrg.setItems(orgListItems);
+                setListOfOrg(orgRepository);
+                ObservableList<String>orgListItems=listOfOrg.getItems();
                 addOrgBtn.setOnAction(event1 -> addOrganization(event,orgRepository,orgListItems));
                 noOrgInfo.setVisible(false);
             } catch (NoSuchEntityException e) {
@@ -230,6 +227,20 @@ public class UserController implements Initializable {
         else {
             organizationsPane.setVisible(false);
         }
+    }
+
+    public void setListOfOrg(OrgRepository orgRepository){
+        List<Integer>numbers=new ArrayList<>();
+        for(int i=1;i<=orgRepository.findNumberOfOrgsOfUser(user.getId());i++){
+            numbers.add(i);
+        }
+        List<Organization>orgList=orgRepository.findAllByUserId(user.getId());
+        ObservableList<String>orgListItems=FXCollections.observableList(orgList
+                .stream()
+                .map(x->numbers.get(orgList.indexOf(x))+". "+x.getType().toString()+' '+x.getName())
+                .collect(Collectors.toList()));
+        listOfOrg.setItems(orgListItems);
+
     }
 
     public void addOrganization(ActionEvent event, OrgRepository orgRepository, ObservableList<String>observableList){
@@ -263,7 +274,14 @@ public class UserController implements Initializable {
                 organization.setNumberOfEmployees(Integer.parseInt(emplNumberField.getText()));
             }
             organization.setUserId(user.getId());
-            orgRepository.create(organization);
+            try{
+                orgRepository.create(organization);
+            }catch (RecurringOrgNameException e){
+                Options.showAlert(Alert.AlertType.ERROR, window, "Ошибка",
+                        "Вы уже добавляли организацию с таким юридическим именем");
+                return;
+            }
+
             addOrgPane.setVisible(false);
             String lastNumber=new String();
             if(!observableList.isEmpty()){
@@ -278,5 +296,25 @@ public class UserController implements Initializable {
             noOrgInfo.setVisible(false);
             }
         );
+    }
+
+    public void deleteOrganization(ActionEvent event){
+
+        StringBuilder idStr= new StringBuilder(new String());
+        String selected=listOfOrg.getSelectionModel().getSelectedItem();
+        for(int i=0;i<selected.indexOf(".");i++){
+            idStr.append(selected.charAt(i));
+        }
+        Long id=Long.parseLong(idStr.toString());
+        System.out.println(selected);
+    }
+
+    public void setContextMenu(ListView listView){
+        MenuItem menuItem=new MenuItem("Удалить");
+        ContextMenu contextMenu=new ContextMenu(menuItem);
+        listView.setContextMenu(contextMenu);
+        menuItem.setOnAction(this::deleteOrganization);
+
+
     }
 }

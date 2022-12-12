@@ -1,6 +1,7 @@
 package com.kasperovich.javafxapp.repository;
 
 import com.kasperovich.javafxapp.exception.RecurringEmailException;
+import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public interface CRUDRepository<K, T> {
 
     List<T> findAll(Optional<Integer> limit, int offset);
 
-    T create(T object);
+    T create(T object) throws RecurringOrgNameException, RecurringEmailException;
 
     T update(T object);
 
