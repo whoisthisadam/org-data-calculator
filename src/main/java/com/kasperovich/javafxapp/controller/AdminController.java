@@ -12,14 +12,19 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import lombok.RequiredArgsConstructor;
+import javafx.stage.Stage;
+import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +46,8 @@ public class AdminController implements Initializable {
     @FXML
     public Button backToListOfUsers;
     @FXML
+    public Button adminToUsersBtn;
+    @FXML
     private Button showUsersBtn;
 
     @FXML
@@ -49,6 +56,8 @@ public class AdminController implements Initializable {
     @FXML
     private ListView<String> usersList;
 
+    User admin=new User();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         userData.setVisible(false);
@@ -56,6 +65,11 @@ public class AdminController implements Initializable {
         logoutBtn.setOnAction(event -> ChangeScene.changeScene(event,"/fxml/login_form.fxml", "User login"));
         showUsersBtn.setOnAction(this::onUsersCLicked);
         usersList.setOnMouseClicked(this::onUserClicked);
+        adminToUsersBtn.setOnAction(this::switchToUser);
+    }
+
+    public void initAdmin(User user){
+        admin=user;
     }
 
     @FXML
@@ -111,7 +125,22 @@ public class AdminController implements Initializable {
                 usersList.setVisible(true);
             }
         });
+    }
 
+    public void switchToUser(ActionEvent event){
+        Stage stage=(Stage) adminToUsersBtn.getScene().getWindow();
+        FXMLLoader loader=new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/user_menu.fxml")));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        UserController userController=loader.getController();
+        userController.initUser(admin);
+        stage.setTitle("Menu");
+        stage.setScene(new Scene(root, 800, 500));
+        stage.show();
     }
 }
 

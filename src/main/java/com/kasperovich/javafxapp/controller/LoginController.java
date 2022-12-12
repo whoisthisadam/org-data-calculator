@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -85,7 +84,10 @@ public class LoginController implements Initializable {
                     break;
                 }
                 case 2:{
-                    Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/admin_menu.fxml")));
+                    FXMLLoader loader=new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/admin_menu.fxml")));
+                    Parent root = loader.load();
+                    AdminController adminController=loader.getController();
+                    adminController.initAdmin(user);
                     stage.setTitle("Menu(ADMIN)");
                     stage.setScene(new Scene(root, 800, 500));
                     stage.show();

@@ -38,8 +38,9 @@
                   </AnchorPane>
                </children></AnchorPane>
             <Button fx:id="showUsersBtn" layoutX="14.0" layoutY="101.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Пользователи" />
+            <Button fx:id="logoutBtn" layoutX="48.0" layoutY="338.0" mnemonicParsing="false" text="Выйти" />
+            <Button fx:id="adminToUsersBtn" layoutX="4.0" layoutY="288.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="133.0" text="Меню пользователя" />
          </children>
       </AnchorPane>
-      <Button fx:id="logoutBtn" mnemonicParsing="false" text="Выйти" />
    </children>
 </AnchorPane>

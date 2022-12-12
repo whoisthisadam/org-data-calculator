@@ -5,8 +5,6 @@ m
 =src/main/java/com/kasperovich/javafxapp/util/ChangeScene.java,7\6\769a8331924cbeb66cea0ea4ff7caa738faeaad8
 t
 Dsrc/main/java/com/kasperovich/javafxapp/util/DBPropertiesReader.java,2\a\2a3147c19f7609d309bfd00c3930a02ad08badb3
-w
-Gsrc/main/java/com/kasperovich/javafxapp/controller/LoginController.java,6\0\60255dfc10b02eb8a3f93701cbaa5c15a3eed6b2
 i
 9src/main/java/com/kasperovich/javafxapp/util/Options.java,3\5\353ced0e2261104d9749cf38a362764abc56b094
 „
@@ -32,8 +30,6 @@ p
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-w
-Gsrc/main/java/com/kasperovich/javafxapp/controller/AdminController.java,9\e\9e5bfec08ec8346aa10d73209ee41f53effdcd04
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 d
