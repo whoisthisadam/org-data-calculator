@@ -1,16 +1,10 @@
 package com.kasperovich.javafxapp.repository.organization;
 
 import com.kasperovich.javafxapp.domain.Organization;
-import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.domain.enums.OrgType;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
-import com.kasperovich.javafxapp.exception.RecurringEmailException;
 import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
-import com.kasperovich.javafxapp.repository.user.UserTableColumns;
 import com.kasperovich.javafxapp.util.DBPropertiesReader;
-import lombok.SneakyThrows;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -115,6 +109,28 @@ public class OrgRepoImpl implements OrgRepository{
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RecurringOrgNameException("This user already created organization with this name", 409);
+        }
+    }
+
+    @Override
+    public void deleteByUserIdAndName(Long userId, String name) {
+        final String softDeleteQuery =
+                "update testjfx.organizations " +
+                        "set " +
+                        "is_deleted=true" +
+                        " where user_id="+userId +
+                        " and organizations.name="+"'"+name+"'";
+
+        Connection connection;
+        Statement statement;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(softDeleteQuery);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
         }
     }
 

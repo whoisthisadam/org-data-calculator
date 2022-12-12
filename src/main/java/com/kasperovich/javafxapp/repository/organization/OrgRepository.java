@@ -13,4 +13,6 @@ public interface OrgRepository extends CRUDRepository<Long, Organization> , Auto
     Long findNumberOfOrgsOfUser(Long userId);
 
     Organization create(Organization object) throws RecurringOrgNameException;
+
+    void deleteByUserIdAndName(Long userId, String name);
 }

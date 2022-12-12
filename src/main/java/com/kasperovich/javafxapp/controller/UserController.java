@@ -302,11 +302,17 @@ public class UserController implements Initializable {
 
         StringBuilder idStr= new StringBuilder(new String());
         String selected=listOfOrg.getSelectionModel().getSelectedItem();
-        for(int i=0;i<selected.indexOf(".");i++){
-            idStr.append(selected.charAt(i));
+        StringBuilder name=new StringBuilder();
+        int countBlank=0;
+        for(int i=0;i<selected.length()-1;i++){ //считываем название организации из строки вывода
+            if(selected.charAt(i)==' ')countBlank++;
+            if(countBlank==2){
+                name.append(selected.charAt(i+1));
+            }
         }
-        Long id=Long.parseLong(idStr.toString());
-        System.out.println(selected);
+        OrgRepository orgRepository=new OrgRepoImpl();
+        orgRepository.deleteByUserIdAndName(user.getId(), name.toString());
+        setListOfOrg(orgRepository);
     }
 
     public void setContextMenu(ListView listView){
@@ -314,7 +320,5 @@ public class UserController implements Initializable {
         ContextMenu contextMenu=new ContextMenu(menuItem);
         listView.setContextMenu(contextMenu);
         menuItem.setOnAction(this::deleteOrganization);
-
-
     }
 }
