@@ -19,22 +19,24 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -98,6 +100,8 @@ public class UserController implements Initializable {
    public ListView<String> listOfOrg;
    @FXML
     public Button submitAdd;
+   @FXML
+    public Button userToAdminBtn;
 
 
     User user;
@@ -116,11 +120,13 @@ public class UserController implements Initializable {
         organizationsPane.setVisible(false);
         showMyOrgBtn.setOnAction(this::organizations);
         setContextMenu(listOfOrg);
+        userToAdminBtn.setOnAction(this::switchToAdmin);
     }
 
     public void initUser(User u){
         user=u;
         userPreview.setText(user.getEmail());
+        userToAdminBtn.setVisible(user.getRoleId() != 1);
     }
 
     public void onProfileClicked(ActionEvent event){
@@ -320,5 +326,22 @@ public class UserController implements Initializable {
         ContextMenu contextMenu=new ContextMenu(menuItem);
         listView.setContextMenu(contextMenu);
         menuItem.setOnAction(this::deleteOrganization);
+    }
+
+
+    public void switchToAdmin(ActionEvent event){
+        Stage stage=(Stage) userToAdminBtn.getScene().getWindow();
+        FXMLLoader loader=new FXMLLoader(Objects.requireNonNull(getClass().getResource("/fxml/admin_menu.fxml")));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        AdminController adminController=loader.getController();
+        adminController.initAdmin(user);
+        stage.setTitle("Menu");
+        stage.setScene(new Scene(root, 800, 500));
+        stage.show();
     }
 }
