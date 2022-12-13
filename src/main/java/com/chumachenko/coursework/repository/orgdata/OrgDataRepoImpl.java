@@ -1,11 +1,9 @@
 package com.chumachenko.coursework.repository.orgdata;
 
 import com.chumachenko.coursework.domain.orgdata.OrgData;
-import com.chumachenko.coursework.domain.orgdata.OrgDataLiquidityDto;
 import com.chumachenko.coursework.repository.organization.OrgRepository;
 import com.chumachenko.coursework.util.DBPropertiesReader;
 import com.chumachenko.coursework.util.Options;
-import com.chumachenko.coursework.domain.orgdata.OrgDataSolvencyDto;
 import com.chumachenko.coursework.repository.organization.OrgRepoImpl;
 
 import java.sql.*;
@@ -137,48 +135,6 @@ public class OrgDataRepoImpl implements OrgDataRepository {
     @Override
     public void close() throws Exception {
 
-    }
-
-    @Override
-    public List<OrgDataLiquidityDto> findAllForLiquidityOfOrganization(Long orgId) {
-
-        final String findAllForLuquidityQuery
-                = "select bankroll, short_investments, short_receivables, short_liabilities" +
-                " from orgsinfo.organization_data" +
-                " where organization_id="+orgId;
-
-        List<OrgData> orgDataList = new ArrayList<>();
-
-        Connection connection;
-        Statement statement;
-        ResultSet rs;
-
-        try {
-            connection = DBPropertiesReader.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery(findAllForLuquidityQuery);
-
-            while (rs.next()) {
-                orgDataList.add(orgDataRowMapping(rs));
-            }
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            throw new NullPointerException();
-        }
-
-        return orgDataList.stream().map(x->{
-            return new OrgDataLiquidityDto(
-                    Optional.ofNullable(x.getBankroll()).orElseThrow(NullPointerException::new),
-                    Optional.ofNullable(x.getShortInvestments()).orElseThrow(NullPointerException::new),
-                    Optional.ofNullable(x.getShortReceivables()).orElseThrow(NullPointerException::new),
-                    Optional.ofNullable(x.getShortLiabilities()).orElseThrow(NullPointerException::new));
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<OrgDataSolvencyDto> findAllForSolvencyOfOrganization(Long orgId) {
-        return null;
     }
 
     @Override

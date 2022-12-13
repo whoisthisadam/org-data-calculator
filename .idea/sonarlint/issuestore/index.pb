@@ -9,13 +9,9 @@ q
 Asrc/main/java/com/kasperovich/javafxapp/domain/enums/OrgType.java,9\0\90e13853319d7d5e7c4af22f820c00f5539d9d53
 h
 8src/main/java/com/kasperovich/javafxapp/domain/Role.java,1\8\18d90ac198a52d78a809af52af7acf447ba01781
-y
-Isrc/main/java/com/kasperovich/javafxapp/repository/role/RoleRepoImpl.java,8\0\803c99442a3578201fcf33037b74adf5f6b0505c
 s
 Csrc/main/java/com/kasperovich/javafxapp/domain/enums/RolesType.java,8\3\833dfd72a2a5b4a629cabf04961a85ea76f2ec3e
 h
 8src/main/java/com/kasperovich/javafxapp/domain/User.java,e\7\e78b958804c1b238c4d61fe2c59c0b7820cc6826
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 z
 Jsrc/main/java/com/kasperovich/javafxapp/controller/CongratsController.java,b\5\b5b74c61c33136f116f253e1495bfa57dd3b3bff
