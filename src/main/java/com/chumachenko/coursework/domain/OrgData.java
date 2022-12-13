@@ -1,4 +1,4 @@
-package com.chumachenko.coursework.domain.orgdata;
+package com.chumachenko.coursework.domain;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

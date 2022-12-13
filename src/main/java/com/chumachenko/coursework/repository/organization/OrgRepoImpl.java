@@ -324,7 +324,7 @@ public class OrgRepoImpl implements OrgRepository{
                 "select * from" +
                 " orgsinfo.organizations "+
                 "where is_deleted=false and solvency IS NOT NULL " +
-                "order by solvency limit 10";
+                "order by solvency desc limit 10";
 
         List<Organization> result = new ArrayList<>();
 

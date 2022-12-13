@@ -13,8 +13,6 @@ Esrc/main/java/com/chumachenko/coursework/util/DBPropertiesReader.java,b\e\bec3
 Msrc/main/java/com/chumachenko/coursework/exception/NoSuchEntityException.java,6\5\656adcba9b72e4437b688fdfbb69f03d301e1e83
 j
 :src/main/java/com/chumachenko/coursework/util/Options.java,9\4\949fbfd9f402b16b0ffb640324f468a4b9d5e81c
-q
-Asrc/main/java/com/chumachenko/coursework/domain/Organization.java,a\b\abfd3230e1ddf1c52da18871bc6558ac914c1833
 t
 Dsrc/main/java/com/chumachenko/coursework/domain/orgdata/OrgData.java,e\9\e9b28083998ca38a9780f98bb13db4039cdba787
 …
@@ -41,8 +39,6 @@ Lsrc/main/java/com/chumachenko/coursework/repository/user/UserRepository.java,a
 Nsrc/main/java/com/chumachenko/coursework/repository/user/UserTableColumns.java,1\c\1c05f88bbf0f37fbd6f45ba0dd1c0a7886209836
 „
 Tsrc/main/java/com/chumachenko/coursework/repository/orgdata/OrgDataTableColumns.java,b\a\baed73d47f163ff5d54464be342690ef3e5408ac
-‚
-Rsrc/main/java/com/chumachenko/coursework/repository/orgdata/OrgDataRepository.java,2\0\2041fd674d226bf515b0ffbac1aff57136792961
 |
 Lsrc/main/java/com/chumachenko/coursework/repository/role/RoleRepository.java,b\d\bd067e460ff9515ce6c1e7700e156b8f624b2c01
 z

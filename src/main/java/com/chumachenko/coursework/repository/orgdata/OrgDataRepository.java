@@ -1,6 +1,6 @@
 package com.chumachenko.coursework.repository.orgdata;
 
-import com.chumachenko.coursework.domain.orgdata.OrgData;
+import com.chumachenko.coursework.domain.OrgData;
 import com.chumachenko.coursework.repository.CRUDRepository;
 
 import java.util.List;

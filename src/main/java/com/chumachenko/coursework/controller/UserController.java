@@ -1,11 +1,14 @@
 package com.chumachenko.coursework.controller;
 
+import com.chumachenko.coursework.domain.Formula;
+import com.chumachenko.coursework.domain.OrgData;
 import com.chumachenko.coursework.domain.Organization;
+import com.chumachenko.coursework.repository.formules.FormulesRepoImpl;
+import com.chumachenko.coursework.repository.formules.FormulesRepository;
 import com.chumachenko.coursework.repository.organization.OrgRepository;
 import com.chumachenko.coursework.repository.role.RoleRepoImpl;
 import com.chumachenko.coursework.domain.User;
 import com.chumachenko.coursework.domain.enums.OrgType;
-import com.chumachenko.coursework.domain.orgdata.OrgData;
 import com.chumachenko.coursework.exception.NoSuchEntityException;
 import com.chumachenko.coursework.repository.organization.OrgRepoImpl;
 import com.chumachenko.coursework.repository.orgdata.OrgDataRepoImpl;
@@ -110,7 +113,7 @@ public class UserController implements Initializable {
     @FXML
     public Button calcSolvencyBtn;
     @FXML
-    public Button editOrgDataBtn;
+    public Button showFormulesBtn;
     @FXML
     public Label liquidityLabel;
     @FXML
@@ -159,6 +162,18 @@ public class UserController implements Initializable {
    @FXML
    public Label middleSolvencyLabel;
 
+   @FXML
+   public Label solvencyFormulaLabel;
+
+   @FXML
+   public Label liquidFormulaLabel;
+
+   @FXML
+   public Button backFromFormules;
+
+   @FXML
+    public AnchorPane formulesPane;
+
     @FXML
    private Button solvencyBtn;
 
@@ -186,6 +201,8 @@ public class UserController implements Initializable {
         addSolvencyDataPane.setVisible(false);
         top10LiquidPane.setVisible(false);
         top10Btn.setOnAction(this::showOrganizationsInfo);
+        formulesPane.setVisible(false);
+        showFormulesBtn.setOnAction(this::showFormules);
     }
 
     public void initUser(User u){
@@ -595,5 +612,14 @@ public class UserController implements Initializable {
         OrgRepository orgRepository=new OrgRepoImpl();
         Double solvency=orgRepository.calculateAverageSolvency();
         middleSolvencyLabel.setText(middleSolvencyLabel.getText()+' '+solvency.toString());
+    }
+
+    public void showFormules(ActionEvent event){
+        formulesPane.setVisible(true);
+        FormulesRepository formulesRepository=new FormulesRepoImpl();
+        List<Formula>list=formulesRepository.findAll();
+        liquidFormulaLabel.setText(list.get(1).getValue());
+        solvencyFormulaLabel.setText(list.get(0).getValue());
+        backFromFormules.setOnAction(event1->formulesPane.setVisible(false));
     }
 }

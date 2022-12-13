@@ -1,6 +1,5 @@
 package com.chumachenko.coursework;
 
-import com.chumachenko.coursework.domain.orgdata.OrgData;
 import com.chumachenko.coursework.exception.RecurringEmailException;
 import com.chumachenko.coursework.exception.RecurringOrgNameException;
 import com.chumachenko.coursework.repository.orgdata.OrgDataRepoImpl;
