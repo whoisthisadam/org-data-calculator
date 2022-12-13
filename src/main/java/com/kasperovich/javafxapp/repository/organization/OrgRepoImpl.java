@@ -182,7 +182,23 @@ public class OrgRepoImpl implements OrgRepository{
 
     @Override
     public Double updateSolvency(Double solvency, Long id) {
-        return null;
+        final String updateQuery =
+                "update testjfx.organizations" +
+                        " set solvency= "+solvency+
+                        " where id="+id;
+
+        Connection connection;
+        Statement statement;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(updateQuery);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return solvency;
     }
 
     @Override
@@ -263,7 +279,8 @@ public class OrgRepoImpl implements OrgRepository{
         try {
             connection = DBPropertiesReader.getConnection();
             statement = connection.createStatement();
-            rs=statement.executeQuery(query);rs.next();
+            rs=statement.executeQuery(query);
+            rs.next();
             return orgRowMapping(rs);
         } catch (SQLException e) {
             System.err.println(e.getMessage());

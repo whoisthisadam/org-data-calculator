@@ -13,25 +13,6 @@
    <children>
       <AnchorPane layoutX="148.0" layoutY="1.0" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: #fff;">
          <children>
-            <AnchorPane fx:id="organizationsPane" prefHeight="400.0" prefWidth="425.0" style="-fx-background-color: #fff;">
-               <children>
-                  <ListView fx:id="listOfOrg" layoutX="72.0" layoutY="37.0" prefHeight="292.0" prefWidth="282.0" />
-                  <Button fx:id="addOrgBtn" layoutX="276.0" layoutY="346.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="78.0" text="Добавить" />
-                  <Label fx:id="noOrgInfo" alignment="CENTER" layoutX="71.0" layoutY="86.0" prefHeight="143.0" prefWidth="282.0" text="У вас нет ни одной организации" textAlignment="CENTER" wrapText="true">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane fx:id="addOrgPane" layoutX="7.0" prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: #fff;">
-                     <children>
-                        <TextField fx:id="orgTypeField" layoutX="109.0" layoutY="42.0" prefHeight="27.0" prefWidth="215.0" promptText="Тип(ООО, ЗАО. ОАО. ИП. УП. ПАО)" />
-                        <TextField fx:id="orgNameField" layoutX="109.0" layoutY="92.0" prefHeight="27.0" prefWidth="215.0" promptText="Название" />
-                        <TextField fx:id="emplNumberField" layoutX="109.0" layoutY="144.0" prefHeight="27.0" prefWidth="215.0" promptText="Кол-во сотрудников" />
-                        <Button fx:id="submitAdd" layoutX="175.0" layoutY="207.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" text="Добавить" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
             <AnchorPane fx:id="profile" layoutX="-1.0" prefHeight="400.0" prefWidth="420.0">
                <children>
                   <Label fx:id="userNameAndSurname" alignment="CENTER" layoutY="29.0" prefHeight="35.0" prefWidth="338.0" style="-fx-font-weight: bold;" textAlignment="CENTER">
@@ -57,6 +38,95 @@
                            </font>
                         </Label>
                         <Button fx:id="finishPasswordChange" layoutX="175.0" layoutY="259.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="organizationsPane" prefHeight="400.0" prefWidth="425.0" style="-fx-background-color: #fff;">
+               <children>
+                  <ListView fx:id="listOfOrg" layoutX="72.0" layoutY="37.0" prefHeight="292.0" prefWidth="282.0" />
+                  <Button fx:id="addOrgBtn" layoutX="276.0" layoutY="346.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="78.0" text="Добавить" />
+                  <Label fx:id="noOrgInfo" alignment="CENTER" layoutX="71.0" layoutY="86.0" prefHeight="143.0" prefWidth="282.0" text="У вас нет ни одной организации" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane fx:id="addOrgPane" layoutX="7.0" prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextField fx:id="orgTypeField" layoutX="109.0" layoutY="42.0" prefHeight="27.0" prefWidth="215.0" promptText="Тип(ООО, ЗАО. ОАО. ИП. УП. ПАО)" />
+                        <TextField fx:id="orgNameField" layoutX="109.0" layoutY="92.0" prefHeight="27.0" prefWidth="215.0" promptText="Название" />
+                        <TextField fx:id="emplNumberField" layoutX="109.0" layoutY="144.0" prefHeight="27.0" prefWidth="215.0" promptText="Кол-во сотрудников" />
+                        <Button fx:id="submitAdd" layoutX="175.0" layoutY="207.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="87.0" text="Добавить" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="orgOptionsPane" prefHeight="400.0" prefWidth="439.0" style="-fx-background-color: #fff;">
+               <children>
+                  <Button fx:id="calcLiquidBtn" layoutX="65.0" layoutY="34.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="338.0" text="Рассчитать ликвидность">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="calcSolvencyBtn" layoutX="10.0" layoutY="167.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="420.0" text="Рассчитать платежеспособность">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="editOrgDataBtn" layoutX="51.0" layoutY="267.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="338.0" text="Редактировать данные">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="liquidityLabel" layoutY="108.0" prefHeight="27.0" prefWidth="439.0" style="-fx-background-color: pink;">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="solvencyLabel" layoutX="-2.0" layoutY="240.0" prefHeight="27.0" prefWidth="439.0" style="-fx-background-color: pink;">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="backToListOfOrgsBtn" layoutX="236.0" layoutY="345.0" mnemonicParsing="false" text="Назад" />
+                  <AnchorPane fx:id="addLiquiDataPane" layoutX="-7.0" prefHeight="400.0" prefWidth="446.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextField fx:id="bankrollField" layoutX="128.0" layoutY="105.0" />
+                        <Label layoutX="120.0" layoutY="14.0" prefHeight="35.0" prefWidth="199.0" text="Введите данные">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="128.0" layoutY="84.0" prefHeight="27.0" prefWidth="120.0" text="Денежные средства" />
+                        <Label layoutX="128.0" layoutY="248.0" prefHeight="27.0" prefWidth="181.0" text="Краткосрочные обязательства" />
+                        <Label layoutX="128.0" layoutY="142.0" prefHeight="27.0" prefWidth="227.0" text="Краткосрочные финансовые вложения" />
+                        <Label layoutX="128.0" layoutY="188.0" prefHeight="27.0" prefWidth="260.0" text="Красткосрочная дебиторская задолженность" />
+                        <TextField fx:id="shortInvFiled" layoutX="128.0" layoutY="163.0" />
+                        <TextField fx:id="shortRecFiled" layoutX="128.0" layoutY="213.0" />
+                        <TextField fx:id="shortLiaField" layoutX="128.0" layoutY="269.0" />
+                        <Button fx:id="saveLiquiDataBtn" layoutX="147.0" layoutY="312.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Сохранить" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="addSolvencyDataPane" prefHeight="401.0" prefWidth="439.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextField fx:id="intaligbleAssetsField" layoutX="133.0" layoutY="65.0" />
+                        <TextField fx:id="mainAssetsField" layoutX="133.0" layoutY="118.0" />
+                        <TextField fx:id="prodReversesField" layoutX="133.0" layoutY="176.0" />
+                        <TextField fx:id="unfinishedProdField" layoutX="133.0" layoutY="231.0" />
+                        <TextField fx:id="finishedProdField" layoutX="133.0" layoutY="287.0" />
+                        <TextField fx:id="borrowedFundsField" layoutX="133.0" layoutY="341.0" />
+                        <Label alignment="CENTER" layoutX="112.0" layoutY="7.0" prefHeight="17.0" prefWidth="215.0" text="Введите данные">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="134.0" layoutY="48.0" text="Нематериальные активы" />
+                        <Label layoutX="134.0" layoutY="101.0" text="Основные средства" />
+                        <Label layoutX="134.0" layoutY="159.0" text="Производственные запасы" />
+                        <Label layoutX="134.0" layoutY="214.0" text="Незавершенное производство" />
+                        <Label layoutX="130.0" layoutY="270.0" text="Готовая продукция" />
+                        <Label layoutX="134.0" layoutY="324.0" text="Заемные средства" />
+                        <Button fx:id="saveSolvencyDataBtn" layoutX="177.0" layoutY="366.0" mnemonicParsing="false" text="Сохранить" />
                      </children>
                   </AnchorPane>
                </children>

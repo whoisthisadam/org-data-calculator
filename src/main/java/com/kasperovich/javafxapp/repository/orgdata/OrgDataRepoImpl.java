@@ -221,9 +221,9 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
             if (object.getBankroll() == null) {
                 updateQuery = "update testjfx.organization_data" +
-                        " set  intangible_assets="+object.getIntangibleAssets()+" and main_assets="+object.getMainAssets()+" and "
-                        +"production_reverses= "+object.getProdReverses()+" and unfinished_production="+object.getUnfinishedProduction()
-                        +" and finished_products="+object.getFinishedProducts()+" and borrowed_funds="+object.getBorrowedFunds()+
+                        " set  intangible_assets="+object.getIntangibleAssets()+", main_assets="+object.getMainAssets()
+                        +", production_reverses= "+object.getProdReverses()+", unfinished_production="+object.getUnfinishedProduction()
+                        +", finished_products="+object.getFinishedProducts()+", borrowed_funds="+object.getBorrowedFunds()+
                         " where organization_id="+object.getOrgId();
 
                 connection = DBPropertiesReader.getConnection();
@@ -231,11 +231,23 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
                 statement.executeUpdate();
 
+                OrgRepository orgRepository=new OrgRepoImpl();
+
+                Double solvency=Options.calculateSolvency(
+                        object.getIntangibleAssets(),
+                        object.getMainAssets(),
+                        object.getProdReverses(),
+                        object.getUnfinishedProduction(),
+                        object.getFinishedProducts(),
+                        object.getBorrowedFunds()
+                );
+                orgRepository.updateSolvency(solvency, object.getOrgId());
+
                 return object;
             } else if (object.getIntangibleAssets() == null) {
                 updateQuery = "update testjfx.organization_data" +
-                        " set  bankroll="+object.getBankroll()+" and short_investments="+object.getShortInvestments()+" and "
-                        +"short_receivables= "+object.getShortReceivables()+" and short_liabilities="+object.getShortLiabilities()+
+                        " set  bankroll="+object.getBankroll()+", short_investments="+object.getShortInvestments()
+                        +", short_receivables= "+object.getShortReceivables()+", short_liabilities="+object.getShortLiabilities()+
                         " where organization_id="+object.getOrgId();
 
                 connection = DBPropertiesReader.getConnection();
@@ -251,6 +263,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
                         object.getShortLiabilities()
                 );
                 orgRepository.updateLiquidity(liquidity, object.getOrgId());
+
                 return object;
             }
         } catch (SQLException e) {
