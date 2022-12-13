@@ -6,16 +6,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Objects;
 @RequiredArgsConstructor
 public class MainApp extends Application{
-//public class MainApp{
-    @Override
+
+//    @Override
     public void start(Stage stage) throws Exception {
         System.out.println(getClass());
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/login_form.fxml")));
-        stage.setTitle("Log in");
+        stage.setTitle("Вход");
         stage.setScene(new Scene(root, 800, 500));
         stage.show();
     }

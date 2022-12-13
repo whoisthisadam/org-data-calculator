@@ -46,27 +46,27 @@ public class RegistrationController implements Initializable {
 
         Window owner = submitButton.getScene().getWindow();
 
-        String formError="Form Error!";
+        String formError="Ошибка";
 
         if (firstNameField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter your first name");
+                    "Заполните все поля");
             return;
         }
         if (lastNameField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter your last name");
+                    "Заполните все поля");
             return;
         }
 
         if (emailField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter your email");
+                    "Заполните все поля");
             return;
         }
         if (passwordField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter a password");
+                    "Заполните все поля");
             return;
         }
 
@@ -77,11 +77,11 @@ public class RegistrationController implements Initializable {
 
         try(UserRepository userRepository=new UserRepoImpl()){
             userRepository.create(new User(firstName,lastName,email,password));
-            ChangeScene.changeScene(event, "/fxml/congrats.fxml","User login");
+            ChangeScene.changeScene(event, "/fxml/congrats.fxml","Вход");
         }
         catch (RecurringEmailException e){
-            Options.showAlert(Alert.AlertType.ERROR, owner, "Sign up error",
-                    "Sorry, user with this email already registered");
+            Options.showAlert(Alert.AlertType.ERROR, owner, "Ошибка",
+                    "Пользователь с таким именем уже зарегистрирован");
         }
         catch (Exception e){
             throw new RuntimeException();

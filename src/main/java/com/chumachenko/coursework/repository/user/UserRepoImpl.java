@@ -33,7 +33,7 @@ public class UserRepoImpl implements UserRepository{
 
     @Override
     public User findById(Long id) {
-        final String findByIdQuery = "select * from testjfx.users where id = " + id+" and is_deleted=false";
+        final String findByIdQuery = "select * from orgsinfo.users where id = " + id+" and is_deleted=false";
 
         Connection connection;
         Statement statement;
@@ -67,7 +67,7 @@ public class UserRepoImpl implements UserRepository{
 
     @Override
     public List<User> findAll(Optional<Integer> limit, int offset) {
-        final String findAllQuery = "select * from testjfx.users " + "where is_deleted=false order by id limit " + limit + " offset " + offset;
+        final String findAllQuery = "select * from orgsinfo.users " + "where is_deleted=false order by id limit " + limit + " offset " + offset;
 
         List<User> result = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class UserRepoImpl implements UserRepository{
             //statement.executeQuery();
 
             /*Get users last insert id for finding new object in DB*/
-            ResultSet resultSet = connection.prepareStatement("SELECT currval('testjfx.users_id_seq') as last_id").executeQuery();
+            ResultSet resultSet = connection.prepareStatement("SELECT currval('orgsinfo.users_id_seq') as last_id").executeQuery();
             resultSet.next();
             long userLastInsertId = resultSet.getLong("last_id");
 

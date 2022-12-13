@@ -44,16 +44,16 @@ public class LoginController implements Initializable {
 
         Window owner = submitButton.getScene().getWindow();
 
-        String formError="Form Error!";
+        String formError="Ошибка";
 
         if (emailField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter your email");
+                    "Введите адрес эл. почты");
             return;
         }
         if (passwordField.getText().isEmpty()) {
             Options.showAlert(Alert.AlertType.ERROR, owner, formError,
-                    "Please enter a password");
+                    "Введите пароль");
             return;
         }
 
@@ -66,8 +66,8 @@ public class LoginController implements Initializable {
         try(UserRepository userRepository=new UserRepoImpl()){
             User user=userRepository.findByEmail(email);
             if(!encoder.matches(passwordField.getText(),user.getPassword())){
-                Options.showAlert(Alert.AlertType.ERROR, owner, "Incorrect password",
-                        "Password is incorrect\nTry again.");
+                Options.showAlert(Alert.AlertType.ERROR, owner, "Неверный пароль",
+                        "Неверный пароль");
                 return;
             }
             Stage stage=(Stage) signUpButton.getScene().getWindow();
@@ -97,8 +97,8 @@ public class LoginController implements Initializable {
             }
         } catch (NoSuchEntityException e) {
             e.printStackTrace();
-            Options.showAlert(Alert.AlertType.ERROR, owner, "No user",
-                    "User with this email does not exist\nTry again");
+            Options.showAlert(Alert.AlertType.ERROR, owner, "Ошибка",
+                    "Пользователя с таким именем не существует");
 
         } catch (Exception e) {
             throw new RuntimeException(e);

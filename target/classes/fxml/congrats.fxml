@@ -5,22 +5,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kasperovich.javafxapp.controller.CongratsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chumachenko.coursework.controller.CongratsController">
 
 
 
    <children>
-      <Label layoutX="187.0" layoutY="116.0" prefHeight="74.0" prefWidth="226.0" text="Welcome!">
+      <Label alignment="CENTER" layoutX="97.0" layoutY="116.0" prefHeight="74.0" prefWidth="419.0" text="Добро пожаловать!">
          <font>
             <Font size="40.0" />
          </font>
       </Label>
-      <Label layoutX="127.0" layoutY="190.0" text="Congratulations on joining us!">
+      <Label layoutX="127.0" layoutY="190.0" text="Поздравляем с регистрацией!">
          <font>
             <Font size="26.0" />
          </font>
       </Label>
-      <Button fx:id="logInCongrats" layoutX="222.0" layoutY="257.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="155.0" style="-fx-background-color: grey;" text="Log in">
+      <Button fx:id="logInCongrats" layoutX="222.0" layoutY="257.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="155.0" style="-fx-background-color: grey;" text="Войти">
          <font>
             <Font size="30.0" />
          </font>

@@ -19,7 +19,7 @@
       <ColumnConstraints />
     </columnConstraints>
     <!-- Add Header Label -->
-    <Label alignment="CENTER" contentDisplay="CENTER" text="Registration" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.rowSpan="1">
+    <Label alignment="CENTER" contentDisplay="CENTER" text="Регистрация" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.rowSpan="1">
         <font>
             <Font name="Arial" size="24" />
         </font>
@@ -31,11 +31,11 @@
       </cursor>
     </Label>
     <!-- Add Name Label -->
-    <Label text="First Name : " GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <Label text="Имя : " GridPane.columnIndex="0" GridPane.rowIndex="1" />
     <!-- Add Name Text Field -->
     <TextField fx:id="firstNameField" prefHeight="40" prefWidth="342.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-    <Label text="Last Name : " GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label text="Фамилия : " GridPane.columnIndex="0" GridPane.rowIndex="2" />
     <!-- Add Name Text Field -->
     <TextField fx:id="lastNameField" prefHeight="40" prefWidth="218.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     <!-- Add Email Label -->
@@ -43,12 +43,12 @@
     <!-- Add Email Text Field -->
     <TextField fx:id="emailField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     <!-- Add Password Label -->
-    <Label text="Password : " GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Label text="Пароль : " GridPane.columnIndex="0" GridPane.rowIndex="4" />
     <!-- Add Password Field -->
     <PasswordField fx:id="passwordField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4" />
     <!-- Add Submit Button -->
     <Button fx:id="submitButton" defaultButton="true" prefHeight="40" prefWidth="100"
-            text="Submit" GridPane.columnIndex="0" GridPane.columnSpan="2"
+            text="Зарегистрироваться" GridPane.columnIndex="0" GridPane.columnSpan="2"
             GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.rowSpan="1">
         <GridPane.margin>
             <Insets bottom="20" top="20" />

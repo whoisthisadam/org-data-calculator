@@ -79,7 +79,8 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
                 statement.executeUpdate();
 
-                ResultSet resultSet = connection.prepareStatement("SELECT currval('testjfx.organization_data_id_seq') as last_id").executeQuery();
+                ResultSet resultSet = connection.prepareStatement("SELECT currval('orgsinfo" +
+                        ".organization_data_id_seq') as last_id").executeQuery();
                 resultSet.next();
                 long userLastInsertId = resultSet.getLong("last_id");
 
@@ -109,7 +110,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
                         object.getShortLiabilities()
                 );
                 orgRepository.updateLiquidity(liquidity, object.getOrgId());
-                ResultSet resultSet = connection.prepareStatement("SELECT currval('testjfx.organization_data_id_seq') as last_id").executeQuery();
+                ResultSet resultSet = connection.prepareStatement("SELECT currval('orgsinfo.organization_data_id_seq') as last_id").executeQuery();
                 resultSet.next();
                 long userLastInsertId = resultSet.getLong("last_id");
 

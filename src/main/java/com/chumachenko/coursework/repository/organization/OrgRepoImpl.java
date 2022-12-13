@@ -126,7 +126,7 @@ public class OrgRepoImpl implements OrgRepository{
             //statement.executeQuery();
 
             /*Get users last insert id for finding new object in DB*/
-            ResultSet resultSet = connection.prepareStatement("SELECT currval('testjfx.organizations_id_seq') as last_id").executeQuery();
+            ResultSet resultSet = connection.prepareStatement("SELECT currval('orgsinfo.organizations_id_seq') as last_id").executeQuery();
             resultSet.next();
             long userLastInsertId = resultSet.getLong("last_id");
 
