@@ -5,6 +5,7 @@ import com.kasperovich.javafxapp.domain.enums.OrgType;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
 import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.util.DBPropertiesReader;
+import lombok.SneakyThrows;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class OrgRepoImpl implements OrgRepository{
                 .modificationDate(rs.getTimestamp(OrgTableColumns.CHANGED))
                 .userId(rs.getLong(OrgTableColumns.USER_ID))
                 .isDeleted(rs.getBoolean(OrgTableColumns.IS_DELETED))
+                .solvency(rs.getDouble(OrgTableColumns.SOLVENCY))
+                .liquidity(rs.getDouble(OrgTableColumns.LIQUIDITY))
                 .build();
     }
 
@@ -32,12 +35,32 @@ public class OrgRepoImpl implements OrgRepository{
 
     @Override
     public Organization findById(Long id) {
-        return null;
+        return  null;
     }
 
     @Override
     public Optional<Organization> findOne(Long id) {
-        return Optional.empty();
+
+        final String findByEmailQuery = "select * from testjfx.organizations where id = "+id+" and is_deleted = false";
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(findByEmailQuery);
+            boolean hasRow = rs.next();
+            if (hasRow) {
+                return Optional.of(orgRowMapping(rs));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
     }
 
     @Override
@@ -73,10 +96,12 @@ public class OrgRepoImpl implements OrgRepository{
         }
     }
 
+    @SneakyThrows
     @Override
-    public Organization create(Organization object) throws RecurringOrgNameException {
+    public Organization create(Organization object){
         final String insertQuery =
-                "insert into testjfx.organizations (type, name, employees_amount, creation_date, modification_date, user_id, is_deleted) " +
+                "insert into testjfx.organizations" +
+                        "(type, name, employees_amount, creation_date, modification_date, user_id, is_deleted) " +
                         " values (?, ?, ?, ?, ?, ?, ?);";
 
         Connection connection;
@@ -132,6 +157,32 @@ public class OrgRepoImpl implements OrgRepository{
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");
         }
+    }
+
+    @Override
+    public Double updateLiquidity(Double liquidity, Long id) {
+        final String updateQuery =
+                "update testjfx.organizations" +
+                        " set liquidity= "+liquidity+
+                        " where id="+id;
+
+        Connection connection;
+        Statement statement;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(updateQuery);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return liquidity;
+    }
+
+    @Override
+    public Double updateSolvency(Double solvency, Long id) {
+        return null;
     }
 
     @Override
@@ -192,6 +243,28 @@ public class OrgRepoImpl implements OrgRepository{
             rs=statement.executeQuery(findNumberQuery);
             rs.next();
             return rs.getLong("count");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+    }
+
+    @Override
+    public Organization findByUserIdAndName(Long userId, String name) {
+        final String query =
+                "select * from testjfx.organizations "+
+                        " where user_id="+userId +
+                        " and organizations.name="+"'"+name+"'and is_deleted=false";
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            rs=statement.executeQuery(query);rs.next();
+            return orgRowMapping(rs);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");

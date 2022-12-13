@@ -1,6 +1,11 @@
 package com.kasperovich.javafxapp;
 
+import com.kasperovich.javafxapp.domain.orgdata.OrgData;
+import com.kasperovich.javafxapp.exception.RecurringEmailException;
+import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.repository.organization.OrgRepoImpl;
+import com.kasperovich.javafxapp.repository.orgdata.OrgDataRepoImpl;
+import com.kasperovich.javafxapp.repository.orgdata.OrgDataRepository;
 import com.kasperovich.javafxapp.repository.user.UserRepoImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Objects;
 @RequiredArgsConstructor
 public class MainApp extends Application{
+//public class MainApp{
     @Override
     public void start(Stage stage) throws Exception {
         System.out.println(getClass());
@@ -24,5 +30,18 @@ public class MainApp extends Application{
     public static void main(String[] args) {
         launch(args);
     }
+
+//    public static void main(String[] args) throws RecurringEmailException, RecurringOrgNameException {
+//        OrgDataRepository orgDataRepository=new OrgDataRepoImpl();
+//        OrgData orgData=new OrgData();
+//        orgData.setOrgId(4L);
+//        orgData.setIntangibleAssets(0.45);
+//        orgData.setMainAssets(0.3);
+//        orgData.setProdReverses(1.23);
+//        orgData.setUnfinishedProduction(2.34);
+//        orgData.setFinishedProducts(1.2);
+//        orgData.setBorrowedFunds(3.0);
+//        orgDataRepository.create(orgData);
+//    }
 
 }

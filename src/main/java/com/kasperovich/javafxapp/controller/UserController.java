@@ -3,33 +3,35 @@ package com.kasperovich.javafxapp.controller;
 import com.kasperovich.javafxapp.domain.Organization;
 import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.domain.enums.OrgType;
+import com.kasperovich.javafxapp.domain.orgdata.OrgData;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
 import com.kasperovich.javafxapp.exception.RecurringOrgNameException;
 import com.kasperovich.javafxapp.repository.organization.OrgRepoImpl;
 import com.kasperovich.javafxapp.repository.organization.OrgRepository;
+import com.kasperovich.javafxapp.repository.orgdata.OrgDataRepoImpl;
+import com.kasperovich.javafxapp.repository.orgdata.OrgDataRepository;
 import com.kasperovich.javafxapp.repository.role.RoleRepoImpl;
 import com.kasperovich.javafxapp.repository.role.RoleRepository;
 import com.kasperovich.javafxapp.repository.user.UserRepoImpl;
 import com.kasperovich.javafxapp.repository.user.UserRepository;
 import com.kasperovich.javafxapp.util.ChangeScene;
 import com.kasperovich.javafxapp.util.Options;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.AccessLevel;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -102,6 +104,33 @@ public class UserController implements Initializable {
     public Button submitAdd;
    @FXML
     public Button userToAdminBtn;
+    @FXML
+    public AnchorPane orgOptionsPane;
+    @FXML
+    public Button calcLiquidBtn;
+    @FXML
+    public Button calcSolvencyBtn;
+    @FXML
+    public Button editOrgDataBtn;
+    @FXML
+    public Label liquidityLabel;
+    @FXML
+    public AnchorPane addLiquiDataPane;
+    @FXML
+    public TextField bankrollField;
+    @FXML
+    public TextField shortRecFiled;
+    @FXML
+    public TextField shortLiaField;
+    @FXML
+    public TextField shortInvFiled;
+    @FXML
+    public Button saveLiquiDataBtn;
+
+    @FXML
+    public Button backToListOfOrgsBtn;
+    @FXML
+    public Label solvencyLabel;
 
 
     User user;
@@ -121,6 +150,9 @@ public class UserController implements Initializable {
         showMyOrgBtn.setOnAction(this::organizations);
         setContextMenu(listOfOrg);
         userToAdminBtn.setOnAction(this::switchToAdmin);
+        listOfOrg.setOnMouseClicked(this::orgOptions);
+        orgOptionsPane.setVisible(false);
+        addLiquiDataPane.setVisible(false);
     }
 
     public void initUser(User u){
@@ -282,7 +314,7 @@ public class UserController implements Initializable {
             organization.setUserId(user.getId());
             try{
                 orgRepository.create(organization);
-            }catch (RecurringOrgNameException e){
+            }catch (RuntimeException e){
                 Options.showAlert(Alert.AlertType.ERROR, window, "Ошибка",
                         "Вы уже добавляли организацию с таким юридическим именем");
                 return;
@@ -306,7 +338,6 @@ public class UserController implements Initializable {
 
     public void deleteOrganization(ActionEvent event){
 
-        StringBuilder idStr= new StringBuilder(new String());
         String selected=listOfOrg.getSelectionModel().getSelectedItem();
         StringBuilder name=new StringBuilder();
         int countBlank=0;
@@ -344,4 +375,109 @@ public class UserController implements Initializable {
         stage.setScene(new Scene(root, 800, 500));
         stage.show();
     }
+
+    public void orgOptions(MouseEvent event){
+        if(event.getButton()== MouseButton.PRIMARY){
+            liquidityLabel.setText(" ");
+            solvencyLabel.setText(" ");
+            orgOptionsPane.setVisible(true);
+            calcLiquidBtn.setOnAction(event1 -> {
+                backToListOfOrgsBtn.setOnAction(event2 -> orgOptionsPane.setVisible(false));
+                OrgRepository orgRepository=new OrgRepoImpl();
+                String selected=listOfOrg.getSelectionModel().getSelectedItem();
+                StringBuilder name=new StringBuilder();
+                int countBlank=0;
+                for(int i=0;i<selected.length()-1;i++){ //считываем название организации из строки вывода
+                    if(selected.charAt(i)==' ')countBlank++;
+                    if(countBlank==2){
+                        name.append(selected.charAt(i+1));
+                    }
+                }
+                final Organization[] organization = {orgRepository.findByUserIdAndName(user.getId(), name.toString())};
+                try(OrgDataRepository orgDataRepository=new OrgDataRepoImpl()){
+                    if(orgDataRepository.isThisOrgPresent(organization[0].getId())){
+                        try{
+                            liquidityLabel.setText("Коэффициент общей ликвидности:"+ organization[0].getLiquidity().toString());
+                        }
+                        catch (NullPointerException e){
+                            updateLiquiData(organization,orgRepository, name.toString(), orgDataRepository);
+                        }
+                    }
+                    else{
+                       createLiquiData(orgDataRepository, organization, name.toString(), orgRepository);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            calcSolvencyBtn.setOnAction(event1 ->{
+
+            });
+        }
+    }
+
+
+    public void createLiquiData(OrgDataRepository orgDataRepository, Organization[] organization, String name, OrgRepository orgRepository){
+        addLiquiDataPane.setVisible(true);
+        saveLiquiDataBtn.setOnAction(event2 -> {
+            if(
+                    bankrollField.getText().isEmpty()||shortLiaField.getText().isEmpty()||
+                            shortRecFiled.getText().isEmpty()||shortInvFiled.getText().isEmpty()
+            ){
+                Options.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
+                        "Ошибка","Заполните все поля"
+                );
+                return;
+            }
+            OrgData orgData=new OrgData();
+            orgData.setOrgId(organization[0].getId());
+            orgData.setBankroll(Double.parseDouble(bankrollField.getText()));
+            orgData.setShortReceivables(Double.parseDouble(shortRecFiled.getText()));
+            orgData.setShortInvestments(Double.parseDouble(shortInvFiled.getText()));
+            orgData.setShortLiabilities(Double.parseDouble(shortLiaField.getText()));
+            orgDataRepository.create(orgData);
+            addLiquiDataPane.setVisible(false);
+            organization[0]=orgRepository.findByUserIdAndName(organization[0].getUserId(), name);
+            liquidityLabel.setText("Коэффициент общей ликвидности:"+organization[0].getLiquidity().toString());
+            bankrollField.setText(" ");
+            shortLiaField.setText(" ");
+            shortRecFiled.setText(" ");
+            shortInvFiled.setText(" ");
+        });
+    }
+
+    public void updateLiquiData(Organization[] organization, OrgRepository orgRepository, String name, OrgDataRepository orgDataRepository){
+        addLiquiDataPane.setVisible(true);
+        saveLiquiDataBtn.setOnAction(event2 -> {
+            if(
+                    bankrollField.getText().isEmpty()||shortLiaField.getText().isEmpty()||
+                            shortRecFiled.getText().isEmpty()||shortInvFiled.getText().isEmpty()
+            ){
+                Options.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
+                        "Ошибка","Заполните все поля"
+                );
+                return;
+            }
+            OrgData orgData=new OrgData();
+            orgData.setOrgId(organization[0].getId());
+            orgData.setBankroll(Double.parseDouble(bankrollField.getText()));
+            orgData.setShortReceivables(Double.parseDouble(shortRecFiled.getText()));
+            orgData.setShortInvestments(Double.parseDouble(shortInvFiled.getText()));
+            orgData.setShortLiabilities(Double.parseDouble(shortLiaField.getText()));
+            orgDataRepository.updateData(orgData);
+            addLiquiDataPane.setVisible(false);
+            organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name);
+            liquidityLabel.setText("Коэффициент общей ликвидности:"+organization[0].getLiquidity().toString());
+            bankrollField.setText(" ");
+            shortLiaField.setText(" ");
+            shortRecFiled.setText(" ");
+            shortInvFiled.setText(" ");
+        });
+    }
+
+
+
+
+
+
 }

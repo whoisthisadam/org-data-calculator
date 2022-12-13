@@ -20,7 +20,7 @@ public interface CRUDRepository<K, T> {
 
     List<T> findAll(Optional<Integer> limit, int offset);
 
-    T create(T object) throws RecurringOrgNameException, RecurringEmailException;
+    T create(T object);
 
     T update(T object);
 

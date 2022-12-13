@@ -4,6 +4,7 @@ import com.kasperovich.javafxapp.domain.User;
 import com.kasperovich.javafxapp.exception.NoSuchEntityException;
 import com.kasperovich.javafxapp.exception.RecurringEmailException;
 import com.kasperovich.javafxapp.util.DBPropertiesReader;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -89,9 +90,9 @@ public class UserRepoImpl implements UserRepository{
         }
     }
 
-
+    @SneakyThrows
     @Override
-    public User create(User object) throws RecurringEmailException {
+    public User create(User object) {
         final String insertQuery =
                 "insert into testjfx.users (first_name, last_name, email , creation_date, modification_date, is_deleted, password, role_id) " +
                         " values (?, ?, ?, ?, ?, ?, ?,?);";

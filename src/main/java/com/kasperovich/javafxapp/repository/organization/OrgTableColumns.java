@@ -18,4 +18,8 @@ public interface OrgTableColumns {
 
     String IS_DELETED = "is_deleted";
 
+    String SOLVENCY="solvency";
+
+    String LIQUIDITY="liquidity";
+
 }

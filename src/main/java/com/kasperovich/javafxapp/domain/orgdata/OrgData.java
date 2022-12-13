@@ -1,39 +1,40 @@
-package com.kasperovich.javafxapp.domain;
+package com.kasperovich.javafxapp.domain.orgdata;
 
-import com.kasperovich.javafxapp.domain.enums.OrgType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import java.sql.Timestamp;
 
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Organization {
+public class OrgData {
 
     Long id;
 
-    OrgType type;
+    Long orgId;
 
-    String name;
+    Double bankroll;
 
-    Integer numberOfEmployees;
+    Double shortInvestments;
 
-    Timestamp creationDate;
+    Double shortReceivables;
 
-    Timestamp modificationDate;
+    Double shortLiabilities;
 
-    Long userId;
+    Double intangibleAssets;
 
-    Boolean isDeleted;
+    Double mainAssets;
 
-    Double solvency;
+    Double prodReverses;
 
-    Double liquidity;
+    Double unfinishedProduction;
+
+    Double finishedProducts;
+
+    Double borrowedFunds;
 
     @Override
     public String toString() {
@@ -41,4 +42,5 @@ public class Organization {
                 this, ToStringStyle.JSON_STYLE
         );
     }
+
 }
