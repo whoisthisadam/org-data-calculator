@@ -153,8 +153,13 @@ public class UserController implements Initializable {
 
    @FXML
    public Button liquiBtn;
+   @FXML
+   public Label middleLiquiLabel;
 
    @FXML
+   public Label middleSolvencyLabel;
+
+    @FXML
    private Button solvencyBtn;
 
 
@@ -180,7 +185,7 @@ public class UserController implements Initializable {
         addLiquiDataPane.setVisible(false);
         addSolvencyDataPane.setVisible(false);
         top10LiquidPane.setVisible(false);
-        top10Btn.setOnAction(this::showTop10);
+        top10Btn.setOnAction(this::showOrganizationsInfo);
     }
 
     public void initUser(User u){
@@ -534,44 +539,61 @@ public class UserController implements Initializable {
         });
     }
 
-    public void showTop10(ActionEvent event){
+    public void showOrganizationsInfo(ActionEvent event){
         if(profile.isVisible())profile.setVisible(false);
         if(organizationsPane.isVisible())organizationsPane.setVisible(false);
         if(!top10LiquidPane.isVisible()){
             top10LiquidPane.setVisible(true);
-            liquiBtn.setOnAction(event1 -> {
-                AtomicReference<Integer> number= new AtomicReference<>(1);
-                List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
-                UserRepository userRepository=new UserRepoImpl();
-                ObservableList<String>top10LiquiListItems=
-                        FXCollections.observableList(
-                                organizationList.stream().map(x->{
-                                    String res= number.toString()+". "+x.getType()+' '+x.getName()+
-                                            "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
-                                    number.updateAndGet(v -> v + 1);
-                                    return res;
-                                }).collect(Collectors.toList())
-                        );
-                top10ListView.setItems(top10LiquiListItems);
-                }
-            );
-            solvencyBtn.setOnAction(event1 -> {
-                AtomicReference<Integer> number= new AtomicReference<>(1);
-                List<Organization>organizationList=new OrgRepoImpl().findTopSortedBySolvency();
-                UserRepository userRepository=new UserRepoImpl();
-                ObservableList<String>top10SolvencyListItems=
-                        FXCollections.observableList(
-                                organizationList.stream().map(x->{
-                                    String res= number.toString()+". "+x.getType()+' '+x.getName()+
-                                            "(П:"+x.getSolvency().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
-                                    number.updateAndGet(v -> v + 1);
-                                    return res;
-                                }).collect(Collectors.toList())
-                        );
-                top10ListView.setItems(top10SolvencyListItems);
-            });
-
+            liquiBtn.setOnAction(event1 ->setTop10ListViewLiquidity());
+            solvencyBtn.setOnAction(event1 ->setTop10ListViewSolvency());
+            setLiquidityLabel(event);
+            setSolvencyLabel(event);
         }
         else top10LiquidPane.setVisible(false);
+    }
+
+
+    public void setTop10ListViewLiquidity(){
+        AtomicReference<Integer> number= new AtomicReference<>(1);
+        List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
+        UserRepository userRepository=new UserRepoImpl();
+        ObservableList<String>top10LiquiListItems=
+                FXCollections.observableList(
+                        organizationList.stream().map(x->{
+                            String res= number.toString()+". "+x.getType()+' '+x.getName()+
+                                    "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                            number.updateAndGet(v -> v + 1);
+                            return res;
+                        }).collect(Collectors.toList())
+                );
+        top10ListView.setItems(top10LiquiListItems);
+    }
+
+    public void setTop10ListViewSolvency(){
+        AtomicReference<Integer> number= new AtomicReference<>(1);
+        List<Organization>organizationList=new OrgRepoImpl().findTopSortedBySolvency();
+        UserRepository userRepository=new UserRepoImpl();
+        ObservableList<String>top10SolvencyListItems=
+                FXCollections.observableList(
+                        organizationList.stream().map(x->{
+                            String res= number.toString()+". "+x.getType()+' '+x.getName()+
+                                    "(П:"+x.getSolvency().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                            number.updateAndGet(v -> v + 1);
+                            return res;
+                        }).collect(Collectors.toList())
+                );
+        top10ListView.setItems(top10SolvencyListItems);
+    }
+
+    public void setLiquidityLabel(ActionEvent event){
+        OrgRepository orgRepository=new OrgRepoImpl();
+        Double liquidity=orgRepository.calculateAverageLiquidity();
+        middleLiquiLabel.setText(middleLiquiLabel.getText()+' '+liquidity.toString());
+    }
+
+    public void setSolvencyLabel(ActionEvent event){
+        OrgRepository orgRepository=new OrgRepoImpl();
+        Double solvency=orgRepository.calculateAverageSolvency();
+        middleSolvencyLabel.setText(middleSolvencyLabel.getText()+' '+solvency.toString());
     }
 }

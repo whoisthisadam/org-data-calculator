@@ -347,4 +347,48 @@ public class OrgRepoImpl implements OrgRepository{
             throw new RuntimeException("SQL Issues!");
         }
     }
+
+    @Override
+    public Double calculateAverageLiquidity() {
+        final String findNumberQuery="select avg(orgsinfo.organizations.liquidity)" +
+                "from orgsinfo.organizations" +
+                " where liquidity IS NOT NULL and is_deleted=false";
+        Double result;
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try{
+            connection=DBPropertiesReader.getConnection();
+            statement= connection.createStatement();
+            rs=statement.executeQuery(findNumberQuery);
+            rs.next();
+            return rs.getDouble("avg");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+    }
+
+    @Override
+    public Double calculateAverageSolvency() {
+        final String findNumberQuery="select avg(orgsinfo.organizations.solvency)" +
+                "from orgsinfo.organizations" +
+                " where organizations.solvency IS NOT NULL and is_deleted=false";
+        Double result;
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try{
+            connection=DBPropertiesReader.getConnection();
+            statement= connection.createStatement();
+            rs=statement.executeQuery(findNumberQuery);
+            rs.next();
+            return rs.getDouble("avg");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+    }
 }

@@ -24,4 +24,8 @@ public interface OrgRepository extends CRUDRepository<Long, Organization>, AutoC
     List<Organization>findTopSortedByLiquidity();
 
     List<Organization>findTopSortedBySolvency();
+
+    Double calculateAverageLiquidity();
+
+    Double calculateAverageSolvency();
 }

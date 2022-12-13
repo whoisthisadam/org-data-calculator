@@ -138,6 +138,8 @@
             <Button fx:id="liquiBtn" layoutX="57.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Ликвидность" />
             <ListView fx:id="top10ListView" layoutX="31.0" layoutY="20.0" prefHeight="260.0" prefWidth="383.0" />
             <Button fx:id="solvencyBtn" layoutX="269.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="138.0" text="Платежеспособность" />
+            <Label fx:id="middleLiquiLabel" layoutX="28.0" layoutY="367.0" prefHeight="18.0" prefWidth="158.0" text="Средняя ликвидность:" />
+            <Label fx:id="middleSolvencyLabel" layoutX="211.0" layoutY="367.0" prefHeight="18.0" prefWidth="227.0" text="Средняя платежеспособность:" />
          </children>
       </AnchorPane>
       <Button fx:id="logOutBtn" layoutX="50.0" layoutY="345.0" mnemonicParsing="false" text="Выйти" />
