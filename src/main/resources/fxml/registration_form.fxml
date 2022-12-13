@@ -8,7 +8,7 @@
 
 <GridPane alignment="center" hgap="10" prefHeight="437.0" prefWidth="541.0"
           vgap="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-          fx:controller="com.kasperovich.javafxapp.controller.RegistrationController">
+          fx:controller="com.chumachenko.coursework.controller.RegistrationController">
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
     </padding>
