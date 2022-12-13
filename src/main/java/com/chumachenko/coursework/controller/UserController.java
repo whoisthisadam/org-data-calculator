@@ -149,7 +149,13 @@ public class UserController implements Initializable {
    @FXML
    public AnchorPane top10LiquidPane;
    @FXML
-   public ListView<String> top10LiquidList;
+   public ListView<String> top10ListView;
+
+   @FXML
+   public Button liquiBtn;
+
+   @FXML
+   private Button solvencyBtn;
 
 
     User user;
@@ -174,7 +180,7 @@ public class UserController implements Initializable {
         addLiquiDataPane.setVisible(false);
         addSolvencyDataPane.setVisible(false);
         top10LiquidPane.setVisible(false);
-        top10Btn.setOnAction(this::showTop10Liquidity);
+        top10Btn.setOnAction(this::showTop10);
     }
 
     public void initUser(User u){
@@ -528,24 +534,43 @@ public class UserController implements Initializable {
         });
     }
 
-    public void showTop10Liquidity(ActionEvent event){
+    public void showTop10(ActionEvent event){
         if(profile.isVisible())profile.setVisible(false);
         if(organizationsPane.isVisible())organizationsPane.setVisible(false);
         if(!top10LiquidPane.isVisible()){
-            AtomicReference<Integer> number= new AtomicReference<>(1);
-            List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
-            UserRepository userRepository=new UserRepoImpl();
-            ObservableList<String>top10LiquiListItems=
-                    FXCollections.observableList(
-                            organizationList.stream().map(x->{
-                                String res= number.toString()+". "+x.getType()+' '+x.getName()+
-                                        "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
-                                number.updateAndGet(v -> v + 1);
-                                return res;
-                            }).collect(Collectors.toList())
-                    );
-            top10LiquidList.setItems(top10LiquiListItems);
             top10LiquidPane.setVisible(true);
+            liquiBtn.setOnAction(event1 -> {
+                AtomicReference<Integer> number= new AtomicReference<>(1);
+                List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
+                UserRepository userRepository=new UserRepoImpl();
+                ObservableList<String>top10LiquiListItems=
+                        FXCollections.observableList(
+                                organizationList.stream().map(x->{
+                                    String res= number.toString()+". "+x.getType()+' '+x.getName()+
+                                            "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                                    number.updateAndGet(v -> v + 1);
+                                    return res;
+                                }).collect(Collectors.toList())
+                        );
+                top10ListView.setItems(top10LiquiListItems);
+                }
+            );
+            solvencyBtn.setOnAction(event1 -> {
+                AtomicReference<Integer> number= new AtomicReference<>(1);
+                List<Organization>organizationList=new OrgRepoImpl().findTopSortedBySolvency();
+                UserRepository userRepository=new UserRepoImpl();
+                ObservableList<String>top10SolvencyListItems=
+                        FXCollections.observableList(
+                                organizationList.stream().map(x->{
+                                    String res= number.toString()+". "+x.getType()+' '+x.getName()+
+                                            "(П:"+x.getSolvency().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                                    number.updateAndGet(v -> v + 1);
+                                    return res;
+                                }).collect(Collectors.toList())
+                        );
+                top10ListView.setItems(top10SolvencyListItems);
+            });
+
         }
         else top10LiquidPane.setVisible(false);
     }

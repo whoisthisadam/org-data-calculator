@@ -135,14 +135,16 @@
       </AnchorPane>
       <AnchorPane fx:id="top10LiquidPane" layoutX="143.0" prefHeight="400.0" prefWidth="446.0" style="-fx-background-color: #fff;">
          <children>
-            <ListView fx:id="top10LiquidList" layoutX="31.0" layoutY="20.0" prefHeight="360.0" prefWidth="383.0" />
+            <Button fx:id="liquiBtn" layoutX="57.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="101.0" text="Ликвидность" />
+            <ListView fx:id="top10ListView" layoutX="31.0" layoutY="20.0" prefHeight="260.0" prefWidth="383.0" />
+            <Button fx:id="solvencyBtn" layoutX="269.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="138.0" text="Платежеспособность" />
          </children>
       </AnchorPane>
       <Button fx:id="logOutBtn" layoutX="50.0" layoutY="345.0" mnemonicParsing="false" text="Выйти" />
       <Label fx:id="userPreview" alignment="CENTER" layoutX="15.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" style="-fx-font-weight: bold;" />
       <Button fx:id="showProfileBtn" layoutX="8.0" layoutY="59.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мой профиль" />
       <Button fx:id="showMyOrgBtn" layoutX="9.0" layoutY="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мои организации" />
-      <Button fx:id="top10Btn" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="ТОП 10" />
+      <Button fx:id="top10Btn" layoutX="2.0" layoutY="145.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="143.0" text="ТОП 10" />
       <Button fx:id="userToAdminBtn" alignment="CENTER" layoutX="8.0" layoutY="280.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="131.0" text="Меню администратора" textAlignment="CENTER" wrapText="true" />
    </children>
 </AnchorPane>
