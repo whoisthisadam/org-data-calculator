@@ -20,4 +20,8 @@ public interface OrgRepository extends CRUDRepository<Long, Organization>, AutoC
     Double updateSolvency(Double solvency, Long id);
 
     Organization findByUserIdAndName(Long userId, String name);
+
+    List<Organization>findTopSortedByLiquidity();
+
+    List<Organization>findTopSortedBySolvency();
 }

@@ -37,6 +37,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -145,6 +146,10 @@ public class UserController implements Initializable {
     public TextField finishedProdField;
     @FXML
     public Button saveSolvencyDataBtn;
+   @FXML
+   public AnchorPane top10LiquidPane;
+   @FXML
+   public ListView<String> top10LiquidList;
 
 
     User user;
@@ -168,6 +173,8 @@ public class UserController implements Initializable {
         orgOptionsPane.setVisible(false);
         addLiquiDataPane.setVisible(false);
         addSolvencyDataPane.setVisible(false);
+        top10LiquidPane.setVisible(false);
+        top10Btn.setOnAction(this::showTop10Liquidity);
     }
 
     public void initUser(User u){
@@ -178,6 +185,7 @@ public class UserController implements Initializable {
 
     public void onProfileClicked(ActionEvent event){
         if(organizationsPane.isVisible())organizationsPane.setVisible(false);
+        if(top10LiquidPane.isVisible())top10LiquidPane.setVisible(false);
         if(!profile.isVisible()){
             RoleRepository roleRepository=new RoleRepoImpl();
             userNameAndSurname.setText(user.getFirstName()+' '+user.getLastName());
@@ -259,6 +267,7 @@ public class UserController implements Initializable {
     }
 
     public void organizations(ActionEvent event){
+        if(top10LiquidPane.isVisible())top10LiquidPane.setVisible(false);
         if(profile.isVisible())profile.setVisible(false);
         if(!organizationsPane.isVisible()) {
             organizationsPane.setVisible(true);
@@ -517,5 +526,27 @@ public class UserController implements Initializable {
             finishedProdField.setText("");
             borrowedFundsField.setText(" ");
         });
+    }
+
+    public void showTop10Liquidity(ActionEvent event){
+        if(profile.isVisible())profile.setVisible(false);
+        if(organizationsPane.isVisible())organizationsPane.setVisible(false);
+        if(!top10LiquidPane.isVisible()){
+            AtomicReference<Integer> number= new AtomicReference<>(1);
+            List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
+            UserRepository userRepository=new UserRepoImpl();
+            ObservableList<String>top10LiquiListItems=
+                    FXCollections.observableList(
+                            organizationList.stream().map(x->{
+                                String res= number.toString()+". "+x.getType()+' '+x.getName()+
+                                        "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                                number.updateAndGet(v -> v + 1);
+                                return res;
+                            }).collect(Collectors.toList())
+                    );
+            top10LiquidList.setItems(top10LiquiListItems);
+            top10LiquidPane.setVisible(true);
+        }
+        else top10LiquidPane.setVisible(false);
     }
 }

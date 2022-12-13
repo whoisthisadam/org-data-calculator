@@ -280,8 +280,68 @@ public class OrgRepoImpl implements OrgRepository{
             connection = DBPropertiesReader.getConnection();
             statement = connection.createStatement();
             rs=statement.executeQuery(query);
-            rs.next();
-            return orgRowMapping(rs);
+            if(rs.next())return orgRowMapping(rs);
+            else return null;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+    }
+
+    @Override
+    public List<Organization> findTopSortedByLiquidity() {
+        final String findQuery =
+                "select * from" +
+                        " orgsinfo.organizations "+
+                        "where is_deleted=false and liquidity IS NOT NULL " +
+                        "order by liquidity desc limit 10";
+
+        List<Organization> result = new ArrayList<>();
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(findQuery);
+
+            while (rs.next()) {
+                result.add(orgRowMapping(rs));
+            }
+
+            return result;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+    }
+
+    @Override
+    public List<Organization> findTopSortedBySolvency() {
+        final String findQuery =
+                "select * from" +
+                " orgsinfo.organizations "+
+                "where is_deleted=false and solvency IS NOT NULL " +
+                "order by solvency limit 10";
+
+        List<Organization> result = new ArrayList<>();
+
+        Connection connection;
+        Statement statement;
+        ResultSet rs;
+
+        try {
+            connection = DBPropertiesReader.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery(findQuery);
+
+            while (rs.next()) {
+                result.add(orgRowMapping(rs));
+            }
+
+            return result;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");

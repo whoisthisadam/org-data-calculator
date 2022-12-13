@@ -1,5 +1,11 @@
 package com.chumachenko.coursework;
 
+import com.chumachenko.coursework.domain.orgdata.OrgData;
+import com.chumachenko.coursework.exception.RecurringEmailException;
+import com.chumachenko.coursework.exception.RecurringOrgNameException;
+import com.chumachenko.coursework.repository.orgdata.OrgDataRepoImpl;
+import com.chumachenko.coursework.repository.orgdata.OrgDataRepository;
+import com.chumachenko.coursework.repository.user.UserRepoImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +19,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MainApp extends Application{
 
-//    @Override
+//public class MainApp {
+
+    @Override
     public void start(Stage stage) throws Exception {
         System.out.println(getClass());
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/login_form.fxml")));
@@ -27,16 +35,7 @@ public class MainApp extends Application{
     }
 
 //    public static void main(String[] args) throws RecurringEmailException, RecurringOrgNameException {
-//        OrgDataRepository orgDataRepository=new OrgDataRepoImpl();
-//        OrgData orgData=new OrgData();
-//        orgData.setOrgId(4L);
-//        orgData.setIntangibleAssets(0.45);
-//        orgData.setMainAssets(0.3);
-//        orgData.setProdReverses(1.23);
-//        orgData.setUnfinishedProduction(2.34);
-//        orgData.setFinishedProducts(1.2);
-//        orgData.setBorrowedFunds(3.0);
-//        orgDataRepository.create(orgData);
+//        new UserRepoImpl().updatePassword(20L, "spririch04");
 //    }
 
 }

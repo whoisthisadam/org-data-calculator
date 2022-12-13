@@ -35,8 +35,6 @@ Dsrc/main/java/com/chumachenko/coursework/domain/enums/RolesType.java,f\9\f9cd1
 Nsrc/main/java/com/chumachenko/coursework/repository/role/RoleTableColumns.java,7\e\7e8061709fef644d39c25a4ee478d6615cd314fa
 i
 9src/main/java/com/chumachenko/coursework/domain/User.java,6\0\60e999bb847d67c3a60722b574df3190e47c96dd
-w
-Gsrc/main/java/com/chumachenko/coursework/controller/UserController.java,1\b\1b0bb8113dc844a38ab1cdc47ac874969ab3e649
 |
 Lsrc/main/java/com/chumachenko/coursework/repository/user/UserRepository.java,a\9\a906869b1accc0ff8497fe3c4d49dbabe51205b1
 ~
@@ -45,8 +43,6 @@ Nsrc/main/java/com/chumachenko/coursework/repository/user/UserTableColumns.java
 Tsrc/main/java/com/chumachenko/coursework/repository/orgdata/OrgDataTableColumns.java,b\a\baed73d47f163ff5d54464be342690ef3e5408ac
 ‚
 Rsrc/main/java/com/chumachenko/coursework/repository/orgdata/OrgDataRepository.java,2\0\2041fd674d226bf515b0ffbac1aff57136792961
-ƒ
-Ssrc/main/java/com/chumachenko/coursework/repository/organization/OrgRepository.java,0\9\0944c0d2951e89af58db15e53ecafc1375c7ff1e
 |
 Lsrc/main/java/com/chumachenko/coursework/repository/role/RoleRepository.java,b\d\bd067e460ff9515ce6c1e7700e156b8f624b2c01
 z
