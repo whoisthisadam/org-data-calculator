@@ -367,7 +367,7 @@ public class UserController implements Initializable {
         int countBlank=0;
         for(int i=0;i<selected.length()-1;i++){ //считываем название организации из строки вывода
             if(selected.charAt(i)==' ')countBlank++;
-            if(countBlank==2){
+            if(countBlank>1){
                 name.append(selected.charAt(i+1));
             }
         }
@@ -412,7 +412,7 @@ public class UserController implements Initializable {
             int countBlank=0;
             for(int i=0;i<selected.length()-1;i++){ //считываем название организации из строки вывода
                 if(selected.charAt(i)==' ')countBlank++;
-                if(countBlank==2){
+                if(countBlank>1){
                     name.append(selected.charAt(i+1));
                 }
             }
