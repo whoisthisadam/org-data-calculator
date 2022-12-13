@@ -41,7 +41,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Optional<Organization> findOne(Long id) {
 
-        final String findByEmailQuery = "select * from testjfx.organizations where id = "+id+" and is_deleted = false";
+        final String findByEmailQuery = "select * from orgsinfo.organizations where id = "+id+" and is_deleted = false";
 
         Connection connection;
         Statement statement;
@@ -70,7 +70,7 @@ public class OrgRepoImpl implements OrgRepository{
 
     @Override
     public List<Organization> findAll(Optional<Integer> limit, int offset) {
-        final String findAllQuery = "select * from testjfx.organizations "
+        final String findAllQuery = "select * from orgsinfo.organizations "
                 +
                 "where is_deleted=false order by id limit " + limit + " offset " + offset;
 
@@ -100,7 +100,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Organization create(Organization object){
         final String insertQuery =
-                "insert into testjfx.organizations" +
+                "insert into orgsinfo.organizations" +
                         "(type, name, employees_amount, creation_date, modification_date, user_id, is_deleted) " +
                         " values (?, ?, ?, ?, ?, ?, ?);";
 
@@ -140,7 +140,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public void deleteByUserIdAndName(Long userId, String name) {
         final String softDeleteQuery =
-                "update testjfx.organizations " +
+                "update orgsinfo.organizations " +
                         "set " +
                         "is_deleted=true" +
                         " where user_id="+userId +
@@ -162,7 +162,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Double updateLiquidity(Double liquidity, Long id) {
         final String updateQuery =
-                "update testjfx.organizations" +
+                "update orgsinfo.organizations" +
                         " set liquidity= "+liquidity+
                         " where id="+id;
 
@@ -183,7 +183,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Double updateSolvency(Double solvency, Long id) {
         final String updateQuery =
-                "update testjfx.organizations" +
+                "update orgsinfo.organizations" +
                         " set solvency= "+solvency+
                         " where id="+id;
 
@@ -218,7 +218,7 @@ public class OrgRepoImpl implements OrgRepository{
 
     @Override
     public List<Organization> findAllByUserId(Long userId) {
-        final String findByIdQuery = "select * from testjfx.organizations where user_id = " + userId +
+        final String findByIdQuery = "select * from orgsinfo.organizations where user_id = " + userId +
                 " and is_deleted = false";
 
         List<Organization>result=new ArrayList<>();
@@ -245,7 +245,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Long findNumberOfOrgsOfUser(Long userId) {
         final String findNumberQuery="select count(organizations)" +
-                "from testjfx.organizations" +
+                "from orgsinfo.organizations" +
                 " where organizations.user_id="+userId
                 +" and is_deleted=false";
         Long result;
@@ -268,7 +268,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public Organization findByUserIdAndName(Long userId, String name) {
         final String query =
-                "select * from testjfx.organizations "+
+                "select * from orgsinfo.organizations "+
                         " where user_id="+userId +
                         " and organizations.name="+"'"+name+"'and is_deleted=false";
 

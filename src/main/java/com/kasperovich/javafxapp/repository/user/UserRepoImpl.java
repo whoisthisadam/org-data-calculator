@@ -94,7 +94,7 @@ public class UserRepoImpl implements UserRepository{
     @Override
     public User create(User object) {
         final String insertQuery =
-                "insert into testjfx.users (first_name, last_name, email , creation_date, modification_date, is_deleted, password, role_id) " +
+                "insert into orgsinfo.users (first_name, last_name, email , creation_date, modification_date, is_deleted, password, role_id) " +
                         " values (?, ?, ?, ?, ?, ?, ?,?);";
 
         Connection connection;
@@ -143,7 +143,7 @@ public class UserRepoImpl implements UserRepository{
 
     @Override
     public User findByEmail(String email) {
-        final String findByEmailQuery = "select * from testjfx.users where email = '" + email+"'and is_deleted = false";
+        final String findByEmailQuery = "select * from orgsinfo.users where email = '" + email+"'and is_deleted = false";
 
         Connection connection;
         Statement statement;
@@ -168,7 +168,7 @@ public class UserRepoImpl implements UserRepository{
     @Override
     public User updatePassword(Long id, String password) {
         final String updateQuery =
-                "update testjfx.users " +
+                "update orgsinfo.users " +
                         "set " +
                         "password = ?, modification_date = ?" +
                         " where id = ?";
@@ -196,7 +196,7 @@ public class UserRepoImpl implements UserRepository{
     @Override
     public User updateNamesAndEmail(Long id, String firstName, String lastName, String email) {
         final String updateQuery =
-                "update testjfx.users " +
+                "update orgsinfo.users " +
                         "set " +
                         "first_name = ? , last_name = ?, email = ?, modification_date = ?" +
                         " where id = ?";

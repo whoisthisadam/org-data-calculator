@@ -67,7 +67,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
 
             if (object.getBankroll() == null) {
-                insertQuery = "insert into testjfx.organization_data" +
+                insertQuery = "insert into orgsinfo.organization_data" +
                         "(organization_id, " +
                         "intangible_assets, main_assets, production_reverses, unfinished_production, finished_products, borrowed_funds)" +
                         " values (?, ?, ?, ?, ?, ?, ?);";
@@ -91,7 +91,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
                 return findById(userLastInsertId);
             } else if (object.getIntangibleAssets() == null) {
-                insertQuery = "insert into testjfx.organization_data" +
+                insertQuery = "insert into orgsinfo.organization_data" +
                         "(organization_id, " +
                         "bankroll, short_investments, short_receivables, short_liabilities)" +
                         " values (?, ?, ?, ?, ?);";
@@ -148,7 +148,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
         final String findAllForLuquidityQuery
                 = "select bankroll, short_investments, short_receivables, short_liabilities" +
-                " from testjfx.organization_data" +
+                " from orgsinfo.organization_data" +
                 " where organization_id="+orgId;
 
         List<OrgData> orgDataList = new ArrayList<>();
@@ -189,7 +189,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
     public Boolean isThisOrgPresent(Long orgId) {
 
         final String findNumberQuery="select count(organization_data)" +
-                "from testjfx.organization_data" +
+                "from orgsinfo.organization_data" +
                 " where organization_data.organization_id="+orgId;
         long result;
         Connection connection;
@@ -220,7 +220,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
 
             if (object.getBankroll() == null) {
-                updateQuery = "update testjfx.organization_data" +
+                updateQuery = "update orgsinfo.organization_data" +
                         " set  intangible_assets="+object.getIntangibleAssets()+", main_assets="+object.getMainAssets()
                         +", production_reverses= "+object.getProdReverses()+", unfinished_production="+object.getUnfinishedProduction()
                         +", finished_products="+object.getFinishedProducts()+", borrowed_funds="+object.getBorrowedFunds()+
@@ -245,7 +245,7 @@ public class OrgDataRepoImpl implements OrgDataRepository {
 
                 return object;
             } else if (object.getIntangibleAssets() == null) {
-                updateQuery = "update testjfx.organization_data" +
+                updateQuery = "update orgsinfo.organization_data" +
                         " set  bankroll="+object.getBankroll()+", short_investments="+object.getShortInvestments()
                         +", short_receivables= "+object.getShortReceivables()+", short_liabilities="+object.getShortLiabilities()+
                         " where organization_id="+object.getOrgId();

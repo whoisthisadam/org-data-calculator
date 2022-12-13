@@ -24,7 +24,7 @@ public class RoleRepoImpl implements RoleRepository {
     }
     @Override
     public Role findById(Long id) {
-        final String findByIdQuery = "select * from testjfx.roles where id = " + id;
+        final String findByIdQuery = "select * from orgsinfo.roles where id = " + id;
 
         Connection connection;
         Statement statement;
