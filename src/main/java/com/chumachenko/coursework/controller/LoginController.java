@@ -25,19 +25,24 @@ import java.util.ResourceBundle;
 
 
 public class LoginController implements Initializable {
+
     @FXML
     public Button defUserBtn;
+
     @FXML
     public Button defAdminBtn;
+
     @FXML
     TextField emailField;
+
     @FXML
     PasswordField passwordField;
+
     @FXML
     Button submitButton;
+
     @FXML
     Button signUpButton;
-
 
     @FXML
     public void login(ActionEvent actionEvent) {
@@ -124,8 +129,8 @@ public class LoginController implements Initializable {
         signUpButton.setFocusTraversable(false);
         submitButton.setOnAction(this::login);
         defUserBtn.setOnAction(event -> {
-            emailField.setText("ivanspr@gmail.com");
-            passwordField.setText("spirich04");
+            emailField.setText("irinaigor@gmail.com");
+            passwordField.setText("irina1");
         });
         defAdminBtn.setOnAction(event -> {
             emailField.setText("adamkasper24@gmail.com");

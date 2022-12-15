@@ -1,28 +1,35 @@
-package com.chumachenko.coursework.controller;
+package com.chumachenko.orgsinfo.application.controller;
 
-import com.chumachenko.coursework.domain.User;
-import com.chumachenko.coursework.exception.RecurringEmailException;
-import com.chumachenko.coursework.repository.user.UserRepository;
-import com.chumachenko.coursework.util.Options;
-import com.chumachenko.coursework.repository.user.UserRepoImpl;
-import com.chumachenko.coursework.util.ChangeScene;
+
+import com.chumachenko.orgsinfo.application.AlertManager;
+import com.chumachenko.orgsinfo.application.ChangeScene;
+import com.chumachenko.orgsinfo.connection.clientconnection.ClientConnection;
+import commands.fromserver.ResponseFromServer;
+import entities.User;
+import exception.RecurringEmailException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import lombok.SneakyThrows;
 
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class RegistrationController implements Initializable {
+public class RegistrationController implements Initializable, Connectionable {
+
+    private ClientConnection access;
 
     @FXML
     private TextField firstNameField;
@@ -49,23 +56,23 @@ public class RegistrationController implements Initializable {
         String formError="Ошибка";
 
         if (firstNameField.getText().isEmpty()) {
-            Options.showAlert(Alert.AlertType.ERROR, owner, formError,
+            AlertManager.showAlert(Alert.AlertType.ERROR, owner, formError,
                     "Заполните все поля");
             return;
         }
         if (lastNameField.getText().isEmpty()) {
-            Options.showAlert(Alert.AlertType.ERROR, owner, formError,
+            AlertManager.showAlert(Alert.AlertType.ERROR, owner, formError,
                     "Заполните все поля");
             return;
         }
 
         if (emailField.getText().isEmpty()) {
-            Options.showAlert(Alert.AlertType.ERROR, owner, formError,
+            AlertManager.showAlert(Alert.AlertType.ERROR, owner, formError,
                     "Заполните все поля");
             return;
         }
         if (passwordField.getText().isEmpty()) {
-            Options.showAlert(Alert.AlertType.ERROR, owner, formError,
+            AlertManager.showAlert(Alert.AlertType.ERROR, owner, formError,
                     "Заполните все поля");
             return;
         }
@@ -75,16 +82,22 @@ public class RegistrationController implements Initializable {
         String email = emailField.getText();
         String password = passwordField.getText();
 
-        try(UserRepository userRepository=new UserRepoImpl()){
-            userRepository.create(new User(firstName,lastName,email,password));
-            ChangeScene.changeScene(event, "/fxml/congrats.fxml","Вход");
+        User user=new User(firstName,lastName,email,password);
+
+        ResponseFromServer response;
+
+        try {
+            response=access.register(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        catch (RecurringEmailException e){
-            Options.showAlert(Alert.AlertType.ERROR, owner, "Ошибка",
+
+        if(response==ResponseFromServer.SUCCESFULLY){
+            ChangeScene.changeScene(event, "/fxml/congrats.fxml","Вход", access);
+        }
+        else if(response==ResponseFromServer.ERROR){
+            AlertManager.showAlert(Alert.AlertType.ERROR, owner, "Ошибка",
                     "Пользователь с таким email уже зарегистрирован");
-        }
-        catch (Exception e){
-            throw new RuntimeException();
         }
     }
 
@@ -95,6 +108,8 @@ public class RegistrationController implements Initializable {
         stage.close();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/login_form.fxml"));
         Parent root1 = fxmlLoader.load();
+        LoginController loginController=fxmlLoader.getController();
+        loginController.setAccess(access);
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Log in");
@@ -108,4 +123,7 @@ public class RegistrationController implements Initializable {
         loginButton.setOnAction(this::login);
         submitButton.setOnAction(this::register);
     }
+
+    @Override
+    public void setAccess(ClientConnection connection){access=connection;}
 }

@@ -1,23 +1,14 @@
-package com.chumachenko.coursework.controller;
+package com.chumachenko.orgsinfo.application.controller;
 
-import com.chumachenko.coursework.domain.Formula;
-import com.chumachenko.coursework.domain.OrgData;
-import com.chumachenko.coursework.domain.Organization;
-import com.chumachenko.coursework.repository.formules.FormulesRepoImpl;
-import com.chumachenko.coursework.repository.formules.FormulesRepository;
-import com.chumachenko.coursework.repository.organization.OrgRepository;
-import com.chumachenko.coursework.repository.role.RoleRepoImpl;
-import com.chumachenko.coursework.domain.User;
-import com.chumachenko.coursework.domain.enums.OrgType;
-import com.chumachenko.coursework.exception.NoSuchEntityException;
-import com.chumachenko.coursework.repository.organization.OrgRepoImpl;
-import com.chumachenko.coursework.repository.orgdata.OrgDataRepoImpl;
-import com.chumachenko.coursework.repository.orgdata.OrgDataRepository;
-import com.chumachenko.coursework.repository.role.RoleRepository;
-import com.chumachenko.coursework.repository.user.UserRepoImpl;
-import com.chumachenko.coursework.repository.user.UserRepository;
-import com.chumachenko.coursework.util.ChangeScene;
-import com.chumachenko.coursework.util.Options;
+import com.chumachenko.orgsinfo.application.AlertManager;
+import com.chumachenko.orgsinfo.application.ChangeScene;
+import com.chumachenko.orgsinfo.connection.clientconnection.ClientConnection;
+import commands.fromserver.ResponseFromServer;
+import entities.Formula;
+import entities.OrgData;
+import entities.Organization;
+import entities.User;
+import entities.enums.OrgType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,19 +23,25 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserController implements Initializable {
+public class UserController implements Initializable, Connectionable {
+
+    ClientConnection access;
+    @Override
+    public void setAccess(ClientConnection access) {
+        this.access=access;
+    }
 
     @FXML
     public Button logOutBtn;
@@ -188,7 +185,7 @@ public class UserController implements Initializable {
         saveChangesBtn.setVisible(false);
         changePasswordPane.setVisible(false);
         showProfileBtn.setOnAction(this::onProfileClicked);
-        logOutBtn.setOnAction(event -> ChangeScene.changeScene(event,"/fxml/login_form.fxml","User Login"));
+        logOutBtn.setOnAction(event -> ChangeScene.changeScene(event,"/fxml/login_form.fxml", "User login", access));
         editData.setOnAction(this::onEditClicked);
         changePasswordLink.setOnAction(this::changePassword);
         organizationsPane.setVisible(false);
@@ -211,14 +208,18 @@ public class UserController implements Initializable {
         userToAdminBtn.setVisible(user.getRoleId() != 1);
     }
 
+
     public void onProfileClicked(ActionEvent event){
         if(organizationsPane.isVisible())organizationsPane.setVisible(false);
         if(top10LiquidPane.isVisible())top10LiquidPane.setVisible(false);
         if(!profile.isVisible()){
-            RoleRepository roleRepository=new RoleRepoImpl();
             userNameAndSurname.setText(user.getFirstName()+' '+user.getLastName());
             userEmail.setText(user.getEmail());
-            userRole.setText(roleRepository.findById(user.getRoleId()).getName().toString().substring(5));
+            try {
+                userRole.setText(access.getRoleById(user.getRoleId()).getName().toString().substring(5));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             profile.setVisible(true);
         }
         else {
@@ -248,9 +249,14 @@ public class UserController implements Initializable {
                 user.setFirstName(name.toString());
                 user.setLastName(nameAndSurname.substring(nameAndSurname.indexOf(' ')+1));
                 user.setEmail(editEmail.getText());
-                UserRepository userRepository=new UserRepoImpl();
-                userRepository.updateNamesAndEmail(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
-            }
+                    try {
+                        ResponseFromServer response=access.updateNameAndEmail(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail());
+                        if(response == ResponseFromServer.SUCCESFULLY) System.out.println("User number "+user.getId().toString()+" succesfully changed his data");
+                        else System.out.println("Error changing data by user number "+user.getId());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
     }
 
@@ -262,25 +268,32 @@ public class UserController implements Initializable {
         savePasswordBtn.setOnAction(event1 -> {
                 Window window=oldPasswordField.getScene().getWindow();
                 if(oldPasswordField.getText().isEmpty()){
-                    Options.showAlert(Alert.AlertType.ERROR, window,"Error",
+                    AlertManager.showAlert(Alert.AlertType.ERROR, window,"Error",
                             "Пожалуйста, введите старый пароль");
                     return;
                 }
                 if(newPasswordField.getText().isEmpty()){
-                    Options.showAlert(Alert.AlertType.ERROR, window,"Error",
+                    AlertManager.showAlert(Alert.AlertType.ERROR, window,"Error",
                             "Пожалуйста, введите новый пароль");
                     return;
                 }
                 if(encoder.matches(oldPasswordField.getText(), user.getPassword())){
                     user.setPassword(encoder.encode(newPasswordField.getText()));
-                    UserRepository userRepository=new UserRepoImpl();
-                    userRepository.updatePassword(user.getId(), user.getPassword());
-                    resOfChangePassword.setText("Пароль успешно изменен");
-                    resOfChangePassword.setVisible(true);
-                    finishPasswordChange.setVisible(true);
-                    finishPasswordChange.setText("Продолжить");
-                    finishPasswordChange.setStyle("-fx-background-color: #90ee90");
-                    finishPasswordChange.setOnAction(event2 -> changePasswordPane.setVisible(false));
+                    ResponseFromServer response= null;
+                    try {
+                        response = access.updatePassword(user.getId(), user.getPassword());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    if(response == ResponseFromServer.SUCCESFULLY){
+                        resOfChangePassword.setText("Пароль успешно изменен");
+                        resOfChangePassword.setVisible(true);
+                        finishPasswordChange.setVisible(true);
+                        finishPasswordChange.setText("Продолжить");
+                        finishPasswordChange.setStyle("-fx-background-color: #90ee90");
+                        finishPasswordChange.setOnAction(event2 -> changePasswordPane.setVisible(false));
+                    }
+                    else System.out.println("Error with changing password by user number"+user.getId());
                 }
                 else {
                     resOfChangePassword.setVisible(true);
@@ -300,18 +313,21 @@ public class UserController implements Initializable {
         if(!organizationsPane.isVisible()) {
             organizationsPane.setVisible(true);
             addOrgPane.setVisible(false);
-            try(OrgRepository orgRepository=new OrgRepoImpl()){
-                setListOfOrg(orgRepository);
-                ObservableList<String>orgListItems=listOfOrg.getItems();
-                addOrgBtn.setOnAction(event1 -> addOrganization(event,orgRepository,orgListItems));
-                noOrgInfo.setVisible(false);
-            } catch (NoSuchEntityException e) {
-                noOrgInfo.setVisible(true);
-                ObservableList<String>observableList=FXCollections.observableList(new ArrayList<>());
-                addOrgBtn.setOnAction(event1 -> addOrganization(event, new OrgRepoImpl(),observableList));
-            }
-            catch (Exception e){
+            Long numberOfOrgs;
+            try {
+                numberOfOrgs = access.getNumberOfOrgsUser(user.getId());
+            } catch (Exception e) {
                 throw new RuntimeException(e);
+            }
+            if (numberOfOrgs != 0) {
+                setListOfOrg();
+                ObservableList<String> orgListItems = listOfOrg.getItems();
+                addOrgBtn.setOnAction(event1 -> addOrganization(event, orgListItems));
+                noOrgInfo.setVisible(false);
+            } else {
+                noOrgInfo.setVisible(true);
+                ObservableList<String> observableList = FXCollections.observableList(new ArrayList<>());
+                addOrgBtn.setOnAction(event1 -> addOrganization(event, observableList));
             }
         }
         else {
@@ -319,12 +335,24 @@ public class UserController implements Initializable {
         }
     }
 
-    public void setListOfOrg(OrgRepository orgRepository){
-        List<Integer>numbers=new ArrayList<>();
-        for(int i=1;i<=orgRepository.findNumberOfOrgsOfUser(user.getId());i++){
+
+    public void setListOfOrg(){
+        List<Integer> numbers=new ArrayList<>();
+        Long numberOfOrgs;
+        try {
+            numberOfOrgs= access.getNumberOfOrgsUser(user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        for(int i=1;i<=numberOfOrgs;i++){
             numbers.add(i);
         }
-        List<Organization>orgList=orgRepository.findAllByUserId(user.getId());
+        List<Organization>orgList;
+        try {
+            orgList = access.findAllOrgsByUserId(user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ObservableList<String>orgListItems=FXCollections.observableList(orgList
                 .stream()
                 .map(x->numbers.get(orgList.indexOf(x))+". "+x.getType().toString()+' '+x.getName())
@@ -333,26 +361,26 @@ public class UserController implements Initializable {
 
     }
 
-    public void addOrganization(ActionEvent event, OrgRepository orgRepository, ObservableList<String>observableList){
+    public void addOrganization(ActionEvent event, ObservableList<String>observableList){
         addOrgPane.setVisible(true);
         submitAdd.setOnAction(event1 -> {
             Window window=oldPasswordField.getScene().getWindow();
             if (orgTypeField.getText().isEmpty()) {
-                    Options.showAlert(Alert.AlertType.ERROR, window,"Error",
+                    AlertManager.showAlert(Alert.AlertType.ERROR, window,"Error",
                             "Введите тип организации");
                     return;
                 }
             if(orgNameField.getText().isEmpty()){
-                Options.showAlert(Alert.AlertType.ERROR, window,"Error",
+                    AlertManager.showAlert(Alert.AlertType.ERROR, window,"Error",
                         "Введите название организации");
-                return;
+                    return;
                 }
             Organization organization=new Organization();
             try {
                 organization.setType(OrgType.valueOf(orgTypeField.getText()));
             }
             catch (IllegalArgumentException e){
-                Options.showAlert(Alert.AlertType.ERROR, window, "Error",
+                AlertManager.showAlert(Alert.AlertType.ERROR, window, "Error",
                 "Недопустимый тип организации");
                 return;
             }
@@ -364,14 +392,19 @@ public class UserController implements Initializable {
                 organization.setNumberOfEmployees(Integer.parseInt(emplNumberField.getText()));
             }
             organization.setUserId(user.getId());
-            try{
-                orgRepository.create(organization);
-            }catch (RuntimeException e){
-                Options.showAlert(Alert.AlertType.ERROR, window, "Ошибка",
-                        "Вы уже добавляли организацию с таким юридическим именем");
-                return;
+            try {
+                ResponseFromServer response=access.createOrganization(organization);
+                if(response==ResponseFromServer.SUCCESFULLY){
+                    System.out.println("Organization "+organization.getName()+"created by user number "+organization.getUserId());
+                }
+                else {
+                    AlertManager.showAlert(Alert.AlertType.ERROR, window, "Ошибка",
+                            "Вы уже добавляли организацию с таким юридическим именем");
+                    return;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
             addOrgPane.setVisible(false);
             String lastNumber=new String();
             if(!observableList.isEmpty()){
@@ -389,7 +422,11 @@ public class UserController implements Initializable {
     }
 
     public void deleteOrganization(ActionEvent event){
-
+        if(listOfOrg.getItems().size()==1){
+            AlertManager.showAlert(Alert.AlertType.ERROR, listOfOrg.getScene().getWindow(), "Ошибка",
+                    "Минимум одна организация должна быть после добавления");
+            return;
+        }
         String selected=listOfOrg.getSelectionModel().getSelectedItem();
         StringBuilder name=new StringBuilder();
         int countBlank=0;
@@ -399,9 +436,14 @@ public class UserController implements Initializable {
                 name.append(selected.charAt(i+1));
             }
         }
-        OrgRepository orgRepository=new OrgRepoImpl();
-        orgRepository.deleteByUserIdAndName(user.getId(), name.toString());
-        setListOfOrg(orgRepository);
+        try {
+            ResponseFromServer response=access.deleteOrganization(user.getId(), name.toString());
+            if(response==ResponseFromServer.SUCCESFULLY) System.out.println("User "+user.getEmail()+" deleted organization "+name);
+            else System.out.println("Error deleting organization by user "+user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        setListOfOrg();
     }
 
     public void setContextMenu(ListView listView){
@@ -423,18 +465,18 @@ public class UserController implements Initializable {
         }
         AdminController adminController=loader.getController();
         adminController.initAdmin(user);
+        adminController.setAccess(access);
         stage.setTitle("Menu");
         stage.setScene(new Scene(root, 800, 500));
         stage.show();
     }
 
-    public void orgOptions(MouseEvent event){
+   public void orgOptions(MouseEvent event){
         if(event.getButton()== MouseButton.PRIMARY){
             liquidityLabel.setText(" ");
             solvencyLabel.setText(" ");
             orgOptionsPane.setVisible(true);
             backToListOfOrgsBtn.setOnAction(event2 -> orgOptionsPane.setVisible(false));
-            OrgRepository orgRepository=new OrgRepoImpl();
             String selected=listOfOrg.getSelectionModel().getSelectedItem();
             StringBuilder name=new StringBuilder();
             int countBlank=0;
@@ -444,53 +486,81 @@ public class UserController implements Initializable {
                     name.append(selected.charAt(i+1));
                 }
             }
-            final Organization[] organization = {orgRepository.findByUserIdAndName(user.getId(), name.toString())};
+            final Organization[] organization;
+            try {
+                organization = new Organization[]{access.findOrgByUserIdAndName(user.getId(), name.toString())};
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             calcLiquidBtn.setOnAction(event1 -> {
-                try(OrgDataRepository orgDataRepository=new OrgDataRepoImpl()){
-                    if(orgDataRepository.isThisOrgPresent(organization[0].getId())){
+                    boolean isThisOrgPresent;
+                try {
+                    isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                if(isThisOrgPresent){
                         if(organization[0].getLiquidity()==0.0){
-                            updateLiquiData(organization,orgRepository, name.toString(), orgDataRepository, true);
-                            organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name.toString());
+                            updateLiquiData(organization, name.toString(), true);
+                            try {
+                                organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                         liquidityLabel.setText("Коэффициент общей ликвидности:"+ organization[0].getLiquidity().toString());
                     }
-                    else{
-                       updateLiquiData(organization, orgRepository, name.toString(), orgDataRepository, false);
-                       organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name.toString());
+                else{
+                       updateLiquiData(organization, name.toString(), false);
+                    try {
+                        organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
                 }
             });
             calcSolvencyBtn.setOnAction(event1 ->{
 
-                try(OrgDataRepository orgDataRepository=new OrgDataRepoImpl()){
-                    if(orgDataRepository.isThisOrgPresent(organization[0].getId())){
-                        if(organization[0].getSolvency()==0.0){
-                            updateSolvencyData(organization,orgDataRepository,orgRepository,name.toString(),true);
-                            organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name.toString());
-                        }
-                        solvencyLabel.setText("Коэффициент общей плат-ти:"+ organization[0].getSolvency().toString());
-
-                    }
-                    else{
-                        updateSolvencyData(organization,orgDataRepository,orgRepository,name.toString(),false);
-                        organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name.toString());
-                    }
+                boolean isThisOrgPresent;
+                try {
+                    isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+
+                if(isThisOrgPresent) {
+                    if (organization[0].getSolvency() == 0.0) {
+                        updateSolvencyData(organization, name.toString(), true);
+                        try {
+                            organization[0] = access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    solvencyLabel.setText("Коэффициент общей плат-ти:" + organization[0].getSolvency().toString());
+
+                }
+                else{
+                        updateSolvencyData(organization ,name.toString(),false);
+                    try {
+                        organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
             });
         }
     }
-    public void updateLiquiData(Organization[] organization, OrgRepository orgRepository, String name, OrgDataRepository orgDataRepository, boolean isPresent){
+
+    public void updateLiquiData(Organization[] organization, String name, boolean isPresent){
         addLiquiDataPane.setVisible(true);
         saveLiquiDataBtn.setOnAction(event2 -> {
             if(
                     bankrollField.getText().isEmpty()||shortLiaField.getText().isEmpty()||
                             shortRecFiled.getText().isEmpty()||shortInvFiled.getText().isEmpty()
             ){
-                Options.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
+                AlertManager.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
                         "Ошибка","Заполните все поля"
                 );
                 return;
@@ -502,13 +572,25 @@ public class UserController implements Initializable {
             orgData.setShortInvestments(Double.parseDouble(shortInvFiled.getText()));
             orgData.setShortLiabilities(Double.parseDouble(shortLiaField.getText()));
             if(isPresent){
-                orgDataRepository.updateData(orgData);
+                try {
+                    access.updateOrgData(orgData);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             else{
-                orgDataRepository.create(orgData);
+                try {
+                    access.createOrgData(orgData);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             addLiquiDataPane.setVisible(false);
-            organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name);
+            try {
+                organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             liquidityLabel.setText("Коэффициент общей ликвидности:"+organization[0].getLiquidity().toString());
             bankrollField.setText(" ");
             shortLiaField.setText(" ");
@@ -517,7 +599,7 @@ public class UserController implements Initializable {
         });
     }
 
-    public void updateSolvencyData(Organization[]organization, OrgDataRepository orgDataRepository, OrgRepository orgRepository, String name, boolean isPresent){
+    public void updateSolvencyData(Organization[]organization, String name, boolean isPresent){
         addSolvencyDataPane.setVisible(true);
         saveSolvencyDataBtn.setOnAction(event2 -> {
             if(
@@ -525,7 +607,7 @@ public class UserController implements Initializable {
                             unfinishedProdField.getText().isEmpty()||prodReversesField.getText().isEmpty() ||
                             finishedProdField.getText().isEmpty()||borrowedFundsField.getText().isEmpty()
             ){
-                Options.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
+                AlertManager.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
                         "Ошибка","Заполните все поля"
                 );
                 return;
@@ -539,13 +621,25 @@ public class UserController implements Initializable {
             orgData.setFinishedProducts(Double.parseDouble(finishedProdField.getText()));
             orgData.setBorrowedFunds(Double.parseDouble(borrowedFundsField.getText()));
             if(isPresent){
-                orgDataRepository.updateData(orgData);
+                try {
+                    access.updateOrgData(orgData);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             else{
-                orgDataRepository.create(orgData);
+                try {
+                    access.createOrgData(orgData);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
             addSolvencyDataPane.setVisible(false);
-            organization[0] =orgRepository.findByUserIdAndName(organization[0].getUserId(), name);
+            try {
+                organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             solvencyLabel.setText("Коэффициент общей плат-ти:"+organization[0].getSolvency().toString());
             intaligbleAssetsField.setText("");
             mainAssetsField.setText("");
@@ -572,13 +666,22 @@ public class UserController implements Initializable {
 
     public void setTop10ListViewLiquidity(){
         AtomicReference<Integer> number= new AtomicReference<>(1);
-        List<Organization>organizationList=new OrgRepoImpl().findTopSortedByLiquidity();
-        UserRepository userRepository=new UserRepoImpl();
+        List<Organization>organizationList= null;
+        try {
+            organizationList = access.findTopSortedByLiquidity();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ObservableList<String>top10LiquiListItems=
                 FXCollections.observableList(
                         organizationList.stream().map(x->{
-                            String res= number.toString()+". "+x.getType()+' '+x.getName()+
-                                    "(Л:"+x.getLiquidity().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                            String res= null;
+                            try {
+                                res = number.toString()+". "+x.getType()+' '+x.getName()+
+                                        "(Л:"+x.getLiquidity().toString()+", "+access.getUserById(x.getUserId()).getEmail()+')';
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             number.updateAndGet(v -> v + 1);
                             return res;
                         }).collect(Collectors.toList())
@@ -588,13 +691,22 @@ public class UserController implements Initializable {
 
     public void setTop10ListViewSolvency(){
         AtomicReference<Integer> number= new AtomicReference<>(1);
-        List<Organization>organizationList=new OrgRepoImpl().findTopSortedBySolvency();
-        UserRepository userRepository=new UserRepoImpl();
+        List<Organization>organizationList= null;
+        try {
+            organizationList = access.findTopSortedBySolvency();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         ObservableList<String>top10SolvencyListItems=
                 FXCollections.observableList(
                         organizationList.stream().map(x->{
-                            String res= number.toString()+". "+x.getType()+' '+x.getName()+
-                                    "(П:"+x.getSolvency().toString()+", "+userRepository.findById(x.getUserId()).getEmail()+')';
+                            String res= null;
+                            try {
+                                res = number.toString()+". "+x.getType()+' '+x.getName()+
+                                        "(П:"+x.getSolvency().toString()+", "+access.getUserById(x.getUserId()).getEmail()+')';
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                             number.updateAndGet(v -> v + 1);
                             return res;
                         }).collect(Collectors.toList())
@@ -602,24 +714,35 @@ public class UserController implements Initializable {
         top10ListView.setItems(top10SolvencyListItems);
     }
 
-    public void setLiquidityLabel(ActionEvent event){
-        OrgRepository orgRepository=new OrgRepoImpl();
-        Double liquidity=orgRepository.calculateAverageLiquidity();
-        middleLiquiLabel.setText(middleLiquiLabel.getText()+' '+liquidity.toString());
-    }
+   public void setLiquidityLabel(ActionEvent event){
+       Double avgLiquidity;
+       try {
+           avgLiquidity = access.getAvgLiquidity();
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+       middleLiquiLabel.setText(middleLiquiLabel.getText()+' '+avgLiquidity.toString());
+   }
+   public void setSolvencyLabel(ActionEvent event){
+       Double avgSolvency;
+       try {
+           avgSolvency=access.getAvgSolvency();
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+       middleSolvencyLabel.setText(middleSolvencyLabel.getText()+' '+avgSolvency.toString());
+   }
 
-    public void setSolvencyLabel(ActionEvent event){
-        OrgRepository orgRepository=new OrgRepoImpl();
-        Double solvency=orgRepository.calculateAverageSolvency();
-        middleSolvencyLabel.setText(middleSolvencyLabel.getText()+' '+solvency.toString());
-    }
-
-    public void showFormules(ActionEvent event){
-        formulesPane.setVisible(true);
-        FormulesRepository formulesRepository=new FormulesRepoImpl();
-        List<Formula>list=formulesRepository.findAll();
-        liquidFormulaLabel.setText(list.get(1).getValue());
-        solvencyFormulaLabel.setText(list.get(0).getValue());
-        backFromFormules.setOnAction(event1->formulesPane.setVisible(false));
-    }
+   public void showFormules(ActionEvent event){
+       formulesPane.setVisible(true);
+       List<Formula>list= null;
+       try {
+           list = access.getAllFormulas();
+       } catch (Exception e) {
+           throw new RuntimeException(e);
+       }
+       liquidFormulaLabel.setText(list.get(1).getValue());
+       solvencyFormulaLabel.setText(list.get(0).getValue());
+       backFromFormules.setOnAction(event1->formulesPane.setVisible(false));
+   }
 }

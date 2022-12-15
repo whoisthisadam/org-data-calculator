@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="568.0" style="             -fx-background-color: #dbf3fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chumachenko.coursework.controller.UserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="568.0" style="             -fx-background-color: #dbf3fa;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chumachenko.orgsinfo.application.controller.UserController">
    <children>
       <AnchorPane layoutX="148.0" layoutY="1.0" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: #fff;">
          <children>
@@ -138,10 +138,7 @@
          </children>
       </AnchorPane>
       <Button fx:id="logOutBtn" layoutX="50.0" layoutY="345.0" mnemonicParsing="false" text="Выйти" />
-      <Label fx:id="userPreview" alignment="CENTER" layoutX="15.0" prefHeight="47.0" prefWidth="120.0" style="-fx-font-weight: bold;" wrapText="true">
-         <font>
-            <Font size="10.0" />
-         </font></Label>
+      <Label fx:id="userPreview" alignment="CENTER" layoutX="15.0" layoutY="21.0" prefHeight="25.0" prefWidth="120.0" style="-fx-font-weight: bold;" />
       <Button fx:id="showProfileBtn" layoutX="8.0" layoutY="59.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мой профиль" />
       <Button fx:id="showMyOrgBtn" layoutX="9.0" layoutY="100.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="131.0" text="Мои организации" />
       <Button fx:id="top10Btn" layoutX="2.0" layoutY="145.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="143.0" text="ТОП 10" />
