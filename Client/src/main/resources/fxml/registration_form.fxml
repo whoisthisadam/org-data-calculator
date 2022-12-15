@@ -48,12 +48,12 @@
     <PasswordField fx:id="passwordField" prefHeight="40" GridPane.columnIndex="1" GridPane.rowIndex="4" />
     <!-- Add Submit Button -->
     <Button fx:id="submitButton" defaultButton="true" prefHeight="40" prefWidth="100"
-            text="Зарегистрироваться" GridPane.columnIndex="0" GridPane.columnSpan="2"
+            text="Готово" GridPane.columnIndex="0" GridPane.columnSpan="2"
             GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.rowSpan="1">
         <GridPane.margin>
             <Insets bottom="20" top="20" />
         </GridPane.margin>
     </Button>
    <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false"
-           prefHeight="35.0" prefWidth="64.0" text="Login" GridPane.columnIndex="3" />
+           prefHeight="35.0" prefWidth="64.0" text="Войти" GridPane.columnIndex="3" />
 </GridPane>

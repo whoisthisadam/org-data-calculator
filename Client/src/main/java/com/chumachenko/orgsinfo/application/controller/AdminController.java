@@ -1,13 +1,12 @@
 package com.chumachenko.orgsinfo.application.controller;
 
+import com.chumachenko.orgsinfo.application.AlertManager;
 import com.chumachenko.orgsinfo.application.ChangeScene;
 import com.chumachenko.orgsinfo.connection.clientconnection.ClientConnection;
 import entities.User;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -30,6 +29,18 @@ import java.util.Objects;
 
 public class AdminController implements Initializable, Connectionable {
 
+    @FXML
+    public Button searchUserBtn;
+    @FXML
+    public AnchorPane searchUserPane;
+    @FXML
+    public TextField searchEmailField;
+    @FXML
+    public Label searchedUserLabel;
+    @FXML
+    public Button backFromSearchUserBtn;
+    @FXML
+    public Button okaySearchUserBtn;
     ClientConnection access;
 
     @Override
@@ -80,6 +91,8 @@ public class AdminController implements Initializable, Connectionable {
         adminToUsersBtn.setOnAction(this::switchToUser);
         showOrgsPane.setVisible(false);
         showOrgsBtn.setOnAction(this::showOrgs);
+        searchUserPane.setVisible(false);
+        searchUserBtn.setOnAction(this::searchUser);
     }
 
     public void initAdmin(User user){
@@ -170,6 +183,37 @@ public class AdminController implements Initializable, Connectionable {
         else{
             showOrgsPane.setVisible(false);
         }
+    }
+
+    public void searchUser(ActionEvent event){
+        searchUserPane.setVisible(true);
+        okaySearchUserBtn.setOnAction(event1 -> {
+                if (searchEmailField.getText().isEmpty()) {
+                    AlertManager.showAlert(Alert.AlertType.ERROR, okaySearchUserBtn.getScene().getWindow(),
+                            "Ошибка", "Введите email");
+                    return;
+                }
+                String email=searchEmailField.getText();
+                boolean isUserExist;
+                try {
+                    isUserExist=access.checkIfUserExist(email);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                if(!isUserExist){
+                    AlertManager.showAlert(Alert.AlertType.ERROR, okaySearchUserBtn.getScene().getWindow(),
+                            "Ошибка", "Такого пользователя не существует");
+                }
+                User user=new User();
+                try {
+                    user=access.findUserByEmail(email);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                searchedUserLabel.setText(user.getFirstName()+' '+user.getLastName()+'('+user.getEmail()+')');
+            }
+        );
+        backFromSearchUserBtn.setOnAction(event1->searchUserPane.setVisible(false));
     }
 }
 

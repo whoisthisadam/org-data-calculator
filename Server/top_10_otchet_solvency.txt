@@ -3,8 +3,8 @@
 3. Родник1(ivanspr@gmail.com) Платежеспособность:54.0
 4. RFWRFGR(ivanspr@gmail.com) Платежеспособность:35.0
 5. Сбербанк(ivanspr@gmail.com) Платежеспособность:25.70434782608696
-6. ТЕСТ(irinaigor@gmail.com) Платежеспособность:23.0
-7. аццукпук(irinaigor@gmail.com) Платежеспособность:16.75
-8. Табак(adamkasper24@gmail.com) Платежеспособность:10.0
-9. Касперович(ivanspr@gmail.com) Платежеспособность:8.0
-10. Родны Кут(adamkasper24@gmail.com) Платежеспособность:7.916666666666667
+6. ТЕСТ(adamkasper24@gmail.com) Платежеспособность:24.5
+7. ТЕСТ(irinaigor@gmail.com) Платежеспособность:23.0
+8. аццукпук(irinaigor@gmail.com) Платежеспособность:16.75
+9. Табак(adamkasper24@gmail.com) Платежеспособность:10.0
+10. Касперович(ivanspr@gmail.com) Платежеспособность:8.0
