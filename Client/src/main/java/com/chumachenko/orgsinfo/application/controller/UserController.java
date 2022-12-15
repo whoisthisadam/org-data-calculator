@@ -35,7 +35,10 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static com.chumachenko.orgsinfo.application.StartApp.getPropertiesFromConfig;
+
 public class UserController implements Initializable, Connectionable {
+
 
     ClientConnection access;
     @Override
@@ -174,6 +177,24 @@ public class UserController implements Initializable, Connectionable {
     @FXML
    private Button solvencyBtn;
 
+    @FXML
+    public AnchorPane orgSearchPane;
+
+    @FXML
+    public Button orgSearchBtn;
+
+    @FXML
+    public TextField searchOrgField;
+
+    @FXML
+    public Label searchedOrgLabel;
+
+    @FXML
+    public Button okaySearchOrgBtn;
+
+    @FXML
+    public Button backFromSearchBtn;
+
 
     User user;
 
@@ -200,6 +221,8 @@ public class UserController implements Initializable, Connectionable {
         top10Btn.setOnAction(this::showOrganizationsInfo);
         formulesPane.setVisible(false);
         showFormulesBtn.setOnAction(this::showFormules);
+        orgSearchPane.setVisible(false);
+        orgSearchBtn.setOnAction(this::searchOrganization);
     }
 
     public void initUser(User u){
@@ -476,7 +499,7 @@ public class UserController implements Initializable, Connectionable {
             liquidityLabel.setText(" ");
             solvencyLabel.setText(" ");
             orgOptionsPane.setVisible(true);
-            backToListOfOrgsBtn.setOnAction(event2 -> orgOptionsPane.setVisible(false));
+            backToListOfOrgsBtn.setOnAction(event2 -> {orgOptionsPane.setVisible(false);});
             String selected=listOfOrg.getSelectionModel().getSelectedItem();
             StringBuilder name=new StringBuilder();
             int countBlank=0;
@@ -486,71 +509,75 @@ public class UserController implements Initializable, Connectionable {
                     name.append(selected.charAt(i+1));
                 }
             }
-            final Organization[] organization;
+            thingsWithOrgs(name.toString());
+        }
+    }
+
+    public void thingsWithOrgs(String name){
+        final Organization[] organization;
+        try {
+            organization = new Organization[]{access.findOrgByUserIdAndName(user.getId(), name)};
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        calcLiquidBtn.setOnAction(event1 -> {
+            boolean isThisOrgPresent;
             try {
-                organization = new Organization[]{access.findOrgByUserIdAndName(user.getId(), name.toString())};
+                isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            calcLiquidBtn.setOnAction(event1 -> {
-                    boolean isThisOrgPresent;
-                try {
-                    isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                if(isThisOrgPresent){
-                        if(organization[0].getLiquidity()==0.0){
-                            updateLiquiData(organization, name.toString(), true);
-                            try {
-                                organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                        liquidityLabel.setText("Коэффициент общей ликвидности:"+ organization[0].getLiquidity().toString());
-                    }
-                else{
-                       updateLiquiData(organization, name.toString(), false);
+            if(isThisOrgPresent){
+                if(organization[0].getLiquidity()==0.0){
+                    updateLiquiData(organization, name.toString(), true);
                     try {
-                        organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                        organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
-            });
-            calcSolvencyBtn.setOnAction(event1 ->{
-
-                boolean isThisOrgPresent;
+                liquidityLabel.setText("Коэффициент общей ликвидности:"+ organization[0].getLiquidity().toString());
+            }
+            else{
+                updateLiquiData(organization, name.toString(), false);
                 try {
-                    isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
+                    organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+            }
+        });
+        calcSolvencyBtn.setOnAction(event1 ->{
 
-                if(isThisOrgPresent) {
-                    if (organization[0].getSolvency() == 0.0) {
-                        updateSolvencyData(organization, name.toString(), true);
-                        try {
-                            organization[0] = access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    solvencyLabel.setText("Коэффициент общей плат-ти:" + organization[0].getSolvency().toString());
+            boolean isThisOrgPresent;
+            try {
+                isThisOrgPresent=access.isThisOrgPresent(organization[0].getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-                }
-                else{
-                        updateSolvencyData(organization ,name.toString(),false);
+            if(isThisOrgPresent) {
+                if (organization[0].getSolvency() == 0.0) {
+                    updateSolvencyData(organization, name.toString(), true);
                     try {
-                        organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name.toString());
+                        organization[0] = access.findOrgByUserIdAndName(organization[0].getUserId(), name);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
+                solvencyLabel.setText("Коэффициент общей плат-ти:" + organization[0].getSolvency().toString());
 
-            });
-        }
+            }
+            else{
+                updateSolvencyData(organization ,name.toString(),false);
+                try {
+                    organization[0] =access.findOrgByUserIdAndName(organization[0].getUserId(), name);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+        });
     }
 
     public void updateLiquiData(Organization[] organization, String name, boolean isPresent){
@@ -744,5 +771,51 @@ public class UserController implements Initializable, Connectionable {
        liquidFormulaLabel.setText(list.get(1).getValue());
        solvencyFormulaLabel.setText(list.get(0).getValue());
        backFromFormules.setOnAction(event1->formulesPane.setVisible(false));
+   }
+
+
+   public void searchOrganization(ActionEvent event){
+        orgSearchPane.setVisible(true);
+        okaySearchOrgBtn.setOnAction(event1 -> {
+            if(searchOrgField.getText().isEmpty()){
+                AlertManager.showAlert(Alert.AlertType.ERROR, okaySearchOrgBtn.getScene().getWindow(),
+                        "Ошибка", "Введите название организации"
+                        );
+                return;
+            }
+            String orgName=searchOrgField.getText();
+            ResponseFromServer response;
+            try {
+                response=access.checkIfThisUserHasThisOrg(user.getId(), orgName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if(response == ResponseFromServer.ORG_NOT_EXIST){
+                searchedOrgLabel.setText("У вас нет организации с таким названием");
+            }
+            else{
+                Organization organization;
+                try {
+                    organization=access.findOrgByUserIdAndName(user.getId(), orgName);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                searchedOrgLabel.setText(organization.getType()+" "+organization.getName());
+                searchedOrgLabel.setOnMouseClicked(event2 -> {
+                    liquidityLabel.setText(" ");
+                    solvencyLabel.setText(" ");
+                    orgOptionsPane.setVisible(true);
+                    orgSearchPane.setVisible(false);
+                    backToListOfOrgsBtn.setOnAction(event3 -> {
+                        orgOptionsPane.setVisible(false);
+                        orgSearchPane.setVisible(true);
+                    ;});
+                    thingsWithOrgs(organization.getName());
+                });
+            }
+            backFromSearchBtn.setOnAction(event2 ->orgSearchPane.setVisible(false));
+
+        });
+
    }
 }

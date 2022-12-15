@@ -5,6 +5,7 @@ import com.chumachenko.orgsinfo.repository.CRUDRepository;
 import entities.Organization;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrgRepository extends CRUDRepository<Long, Organization>, AutoCloseable{
 
@@ -20,7 +21,7 @@ public interface OrgRepository extends CRUDRepository<Long, Organization>, AutoC
 
     Double updateSolvency(Double solvency, Long id);
 
-    Organization findByUserIdAndName(Long userId, String name);
+    Optional<Organization> findByUserIdAndName(Long userId, String name);
 
     List<Organization>findTopSortedByLiquidity();
 

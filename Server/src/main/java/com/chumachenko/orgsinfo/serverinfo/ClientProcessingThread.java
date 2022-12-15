@@ -187,6 +187,13 @@ public class ClientProcessingThread extends Thread{
                 break;
             }
 
+            case CHECK_IF_USER_HAS_THIS_ORG:{
+                String name=receiveObject();
+                Long userId=receiveObject();
+                sendObject(orgService.checkIfThisUserHasThisOrg(name, userId));
+                break;
+            }
+
             default:{
                 sendObject(ResponseFromServer.UNKOWN_COMMAND);
             }

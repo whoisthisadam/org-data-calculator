@@ -267,7 +267,7 @@ public class OrgRepoImpl implements OrgRepository{
     }
 
     @Override
-    public Organization findByUserIdAndName(Long userId, String name) {
+    public Optional<Organization> findByUserIdAndName(Long userId, String name) {
         final String query =
                 "select * from orgsinfo.organizations "+
                         " where user_id="+userId +
@@ -281,8 +281,8 @@ public class OrgRepoImpl implements OrgRepository{
             connection = DBPropertiesReader.getConnection();
             statement = connection.createStatement();
             rs=statement.executeQuery(query);
-            if(rs.next())return orgRowMapping(rs);
-            else return null;
+            if(rs.next())return Optional.of(orgRowMapping(rs));
+            else return Optional.empty();
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException("SQL Issues!");

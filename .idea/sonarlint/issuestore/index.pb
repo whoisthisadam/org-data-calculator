@@ -91,10 +91,6 @@ y
 IServer/src/main/java/com/chumachenko/orgsinfo/service/OrgDataService.java,d\9\d95b0b00ace840a105477e8e8a3e64055532601e
 â
 YServer/src/main/java/com/chumachenko/orgsinfo/repository/orgdata/OrgDataTableColumns.java,2\e\2ecdabb01f9ca0cca2748cd12dfedfe9ea963d51
-Ü
-VServer/src/main/java/com/chumachenko/orgsinfo/repository/organization/OrgRepoImpl.java,5\9\59c8d503427d95b6ea6ca397b87fe581afdcbb65
-à
-XServer/src/main/java/com/chumachenko/orgsinfo/repository/organization/OrgRepository.java,7\9\793b44a3835de19bc2ad85ab01642de0e0da3022
 ä
 ZServer/src/main/java/com/chumachenko/orgsinfo/repository/organization/OrgTableColumns.java,4\a\4a9a492b20c45a7f4222f285c88a32e776928694
 `
@@ -111,8 +107,6 @@ m
 =Models/src/main/java/exception/RecurringOrgNameException.java,9\b\9b025b9fca4b231cd63b97b8b669625654be3bb2
 
 Osrc/main/java/com/chumachenko/coursework/controller/RegistrationController.java,7\f\7f40f91e0feaec395f2c0e4fccaa18142632703d
-p
-@Models/src/main/java/commands/fromserver/ResponseFromServer.java,e\e\ee0ec68735ea9de783a73522fa08f72db75d1562
 Å
 QServer/src/main/java/com/chumachenko/orgsinfo/repository/role/RoleRepository.java,1\5\155ee228242cb077e32481a45972fc144273cc1e
 v
@@ -121,10 +115,6 @@ b
 2Models/src/main/java/entities/enums/RolesType.java,6\2\62f710544885c0165da6bbb50de02008d349cfa8
 É
 SServer/src/main/java/com/chumachenko/orgsinfo/repository/role/RoleTableColumns.java,0\a\0ab43b62cfdbddabe4ebda912f56ad9e7ebdb168
-Ñ
-TServer/src/main/java/com/chumachenko/orgsinfo/serverinfo/ServerProcessingThread.java,b\5\b5dc4f47ea02c73d59ecc02cbfb5e8e3a40d60f6
-w
-GClient/src/main/java/com/chumachenko/orgsinfo/application/StartApp.java,7\1\71b2a4dd29d26c3ca4d8428b311041cd4ba5e69b
 b
 2src/main/java/com/chumachenko/coursework/Test.java,5\4\54716f629635454a8e4e599595f4373783cb7d76
 à

@@ -44,6 +44,8 @@ public enum Command {
 
     GET_AVERAGE_LIQUIDITY,
 
-    GET_ALL_FORMULAS;
+    GET_ALL_FORMULAS,
+
+    CHECK_IF_USER_HAS_THIS_ORG;
 
 }

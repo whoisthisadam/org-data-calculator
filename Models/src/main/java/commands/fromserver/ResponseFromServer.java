@@ -6,6 +6,8 @@ public enum ResponseFromServer {
 
     ERROR,
 
-    UNKOWN_COMMAND;
+    UNKOWN_COMMAND,
+
+    ORG_NOT_EXIST,
 
 }

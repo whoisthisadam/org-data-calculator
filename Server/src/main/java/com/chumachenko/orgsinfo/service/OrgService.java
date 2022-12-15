@@ -9,8 +9,8 @@ import entities.Organization;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class OrgService {
@@ -61,7 +61,7 @@ public class OrgService {
 
     public Organization findOrgByUserIdAndName(Long userId, String name){
         try{
-            return orgRepository.findByUserIdAndName(userId,name);
+            return orgRepository.findByUserIdAndName(userId,name).get();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -111,5 +111,11 @@ public class OrgService {
 
     public Double calcAvgSolvency(){
         return orgRepository.calculateAverageSolvency();
+    }
+
+    public ResponseFromServer checkIfThisUserHasThisOrg(String name, Long userId){
+        Optional<Organization>organization=orgRepository.findByUserIdAndName(userId, name);
+        if(organization.isEmpty())return ResponseFromServer.ORG_NOT_EXIST;
+        else return ResponseFromServer.SUCCESFULLY;
     }
 }

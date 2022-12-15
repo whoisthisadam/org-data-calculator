@@ -186,4 +186,11 @@ public class ClientConnection {
         return receiveObject();
     }
 
+    public ResponseFromServer checkIfThisUserHasThisOrg(Long userid, String orgName) throws Exception {
+        sendObject(Command.CHECK_IF_USER_HAS_THIS_ORG);
+        sendObject(orgName);
+        sendObject(userid);
+        return receiveObject();
+    }
+
 }
