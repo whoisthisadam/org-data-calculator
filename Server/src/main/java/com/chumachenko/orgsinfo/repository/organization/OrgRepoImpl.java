@@ -205,7 +205,7 @@ public class OrgRepoImpl implements OrgRepository{
     @Override
     public String changeOrgName(String name, Long id){
         final String updateQuery="update orgsinfo.organizations " +
-fi                "set name = ? , modification_date= ? " +
+             "set name = ? , modification_date= ? " +
                 "where id= ? ";
 
 
