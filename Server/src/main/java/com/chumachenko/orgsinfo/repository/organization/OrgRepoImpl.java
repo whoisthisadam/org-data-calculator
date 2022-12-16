@@ -203,6 +203,27 @@ public class OrgRepoImpl implements OrgRepository{
     }
 
     @Override
+    public String changeOrgName(String name, Long id){
+        final String updateQuery="update orgsinfo.organizations " +
+                "set name = '"+name+" " +
+                "' where organizations.id="+id.toString();
+
+        Connection connection;
+        Statement statement;
+        try{
+            connection=DBPropertiesReader.getConnection();
+            statement= connection.createStatement();
+            statement.executeUpdate(updateQuery);
+
+        }
+        catch (SQLException ex){
+            System.err.println(ex.getMessage());
+            throw new RuntimeException("SQL Issues!");
+        }
+        return name;
+    }
+
+    @Override
     public Organization update(Organization object) {
         return null;
     }

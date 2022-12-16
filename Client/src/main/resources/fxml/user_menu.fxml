@@ -61,6 +61,14 @@
                      </font>
                   </Label>
                   <Button fx:id="orgSearchBtn" mnemonicParsing="false" text="Поиск" />
+                  <AnchorPane fx:id="orgSearchPane" prefHeight="402.0" prefWidth="440.0" style="-fx-background-color: #fff;">
+                     <children>
+                        <TextField fx:id="searchOrgField" layoutX="140.0" layoutY="151.0" prefHeight="35.0" prefWidth="158.0" promptText="Введите название" />
+                        <Label fx:id="searchedOrgLabel" layoutX="140.0" layoutY="210.0" prefHeight="54.0" prefWidth="158.0" wrapText="true" />
+                        <Button fx:id="okaySearchOrgBtn" layoutX="310.0" layoutY="156.0" mnemonicParsing="false" text="OK" />
+                        <Button fx:id="backFromSearchBtn" layoutX="286.0" layoutY="303.0" mnemonicParsing="false" text="Назад" />
+                     </children>
+                  </AnchorPane>
                   <AnchorPane fx:id="addOrgPane" layoutX="7.0" prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: #fff;">
                      <children>
                         <TextField fx:id="orgTypeField" layoutX="109.0" layoutY="42.0" prefHeight="27.0" prefWidth="215.0" promptText="Тип(ООО, ЗАО. ОАО. ИП. УП. ПАО)" />
@@ -117,7 +125,7 @@
                               <Button fx:id="saveSolvencyDataBtn" layoutX="177.0" layoutY="366.0" mnemonicParsing="false" text="Сохранить" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="formulesPane" prefHeight="402.0" prefWidth="432.0" style="-fx-background-color: #fff;">
+                        <AnchorPane fx:id="formulesPane" prefHeight="402.0" prefWidth="420.0" style="-fx-background-color: #fff;">
                            <children>
                               <Label fx:id="solvencyFormulaLabel" alignment="CENTER" layoutY="150.0" prefHeight="158.0" prefWidth="439.0" wrapText="true">
                                  <font>
@@ -134,12 +142,10 @@
                         </AnchorPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="orgSearchPane" prefHeight="402.0" prefWidth="440.0" style="-fx-background-color: #fff;">
+                  <AnchorPane fx:id="changeOrgNamePane" layoutX="91.0" layoutY="108.0" prefHeight="165.0" prefWidth="191.0" style="-fx-background-color: #fff;">
                      <children>
-                        <TextField fx:id="searchOrgField" layoutX="140.0" layoutY="151.0" prefHeight="35.0" prefWidth="158.0" promptText="Введите название" />
-                        <Label fx:id="searchedOrgLabel" layoutX="140.0" layoutY="210.0" prefHeight="54.0" prefWidth="158.0" wrapText="true" />
-                        <Button fx:id="okaySearchOrgBtn" layoutX="310.0" layoutY="156.0" mnemonicParsing="false" text="OK" />
-                        <Button fx:id="backFromSearchBtn" layoutX="286.0" layoutY="303.0" mnemonicParsing="false" text="Назад" />
+                        <TextField fx:id="newOrgNameField" layoutX="25.0" layoutY="62.0" promptText="Новое название" />
+                        <Button fx:id="okayOrgNameButton" layoutX="84.0" layoutY="119.0" mnemonicParsing="false" text="OK" />
                      </children>
                   </AnchorPane>
                </children>

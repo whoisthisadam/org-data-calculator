@@ -194,6 +194,14 @@ public class ClientProcessingThread extends Thread{
                 break;
             }
 
+            case CHANGE_ORG_NAME:{
+                String name=receiveObject();
+                Long id=receiveObject();
+                ResponseFromServer response=orgService.updateOrgName(name,id);
+                sendObject(response);
+                break;
+            }
+
             default:{
                 sendObject(ResponseFromServer.UNKOWN_COMMAND);
             }

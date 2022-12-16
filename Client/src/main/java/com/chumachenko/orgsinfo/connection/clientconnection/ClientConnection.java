@@ -193,4 +193,11 @@ public class ClientConnection {
         return receiveObject();
     }
 
+    public ResponseFromServer updateOrgName(String name, Long id) throws  Exception{
+        sendObject(Command.CHANGE_ORG_NAME);
+        sendObject(name);
+        sendObject(id);
+        return receiveObject();
+    }
+
 }

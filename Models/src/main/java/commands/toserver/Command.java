@@ -46,6 +46,8 @@ public enum Command {
 
     GET_ALL_FORMULAS,
 
-    CHECK_IF_USER_HAS_THIS_ORG;
+    CHECK_IF_USER_HAS_THIS_ORG,
+
+    CHANGE_ORG_NAME;
 
 }

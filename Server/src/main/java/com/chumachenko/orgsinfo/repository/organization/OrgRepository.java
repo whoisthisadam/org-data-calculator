@@ -30,4 +30,6 @@ public interface OrgRepository extends CRUDRepository<Long, Organization>, AutoC
     Double calculateAverageLiquidity();
 
     Double calculateAverageSolvency();
+
+    String changeOrgName(String name, Long id);
 }

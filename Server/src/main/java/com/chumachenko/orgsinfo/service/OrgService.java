@@ -118,4 +118,15 @@ public class OrgService {
         if(organization.isEmpty())return ResponseFromServer.ORG_NOT_EXIST;
         else return ResponseFromServer.SUCCESFULLY;
     }
+
+    public ResponseFromServer updateOrgName(String name, Long id){
+        try{
+            orgRepository.changeOrgName(name,id);
+            return ResponseFromServer.SUCCESFULLY;
+        }
+        catch (RuntimeException e){
+            e.printStackTrace();
+            return ResponseFromServer.ERROR;
+        }
+    }
 }

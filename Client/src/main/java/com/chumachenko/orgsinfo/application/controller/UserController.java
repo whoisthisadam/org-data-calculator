@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
 public class UserController implements Initializable, Connectionable {
 
 
+
     ClientConnection access;
     @Override
     public void setAccess(ClientConnection access) {
@@ -194,6 +195,16 @@ public class UserController implements Initializable, Connectionable {
     @FXML
     public Button backFromSearchBtn;
 
+    @FXML
+    public AnchorPane changeOrgNamePane;
+
+    @FXML
+    public TextField newOrgNameField;
+
+    @FXML
+    public Button okayOrgNameButton;
+
+
 
     User user;
 
@@ -222,6 +233,7 @@ public class UserController implements Initializable, Connectionable {
         showFormulesBtn.setOnAction(this::showFormules);
         orgSearchPane.setVisible(false);
         orgSearchBtn.setOnAction(this::searchOrganization);
+        changeOrgNamePane.setVisible(false);
     }
 
     public void initUser(User u){
@@ -468,11 +480,52 @@ public class UserController implements Initializable, Connectionable {
         setListOfOrg();
     }
 
-    public void setContextMenuDeleteOrg(ListView listView){
+    public void setContextMenuDeleteOrg(ListView<String> listView){
         MenuItem menuItem=new MenuItem("Удалить");
-        ContextMenu contextMenu=new ContextMenu(menuItem);
+        MenuItem change=new MenuItem("Редактировать");
+        ContextMenu contextMenu=new ContextMenu(menuItem, change);
         listView.setContextMenu(contextMenu);
         menuItem.setOnAction(this::deleteOrganization);
+        change.setOnAction(this::changeOrgName);
+    }
+
+    public void changeOrgName(ActionEvent event){
+        changeOrgNamePane.setVisible(true);
+        okayOrgNameButton.setOnAction(event1 -> {
+            if(newOrgNameField.getText().isEmpty()){
+                AlertManager.showAlert(Alert.AlertType.ERROR, okayOrgNameButton.getScene().getWindow(),
+                        "Ошибка", "Заполните поле");
+                return;
+            }
+            String newName=newOrgNameField.getText();
+            String selected=listOfOrg.getSelectionModel().getSelectedItem();
+            StringBuilder name=new StringBuilder();
+            int countBlank=0;
+            for(int i=0;i<selected.length()-1;i++){ //считываем название организации из строки вывода
+                if(selected.charAt(i)==' ')countBlank++;
+                if(countBlank>1){
+                    name.append(selected.charAt(i+1));
+                }
+            }
+            Organization organization;
+            try {
+                organization=access.findOrgByUserIdAndName(user.getId(), name.toString());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            ResponseFromServer response;
+            try {
+                response=access.updateOrgName(newName, organization.getId());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if(response==ResponseFromServer.SUCCESFULLY){
+                changeOrgNamePane.setVisible(false);
+                setListOfOrg();
+            }
+            else throw new RuntimeException();
+
+        });
     }
 
 
