@@ -99,7 +99,7 @@ public class UserRepoImpl implements UserRepository{
     public User create(User object) {
         final String insertQuery =
                 "insert into orgsinfo.users (first_name, last_name, email , creation_date, modification_date, is_deleted, password, role_id) " +
-                        " values (?, ?, ?, ?, ?, ?, ?,?);";
+                        " values (?, ?, ?, ?, ?, ?, ?, ?);";
 
         Connection connection;
         PreparedStatement statement;

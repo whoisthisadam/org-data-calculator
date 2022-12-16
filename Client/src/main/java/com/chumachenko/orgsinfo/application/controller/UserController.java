@@ -523,7 +523,8 @@ public class UserController implements Initializable, Connectionable {
                 changeOrgNamePane.setVisible(false);
                 setListOfOrg();
             }
-            else throw new RuntimeException();
+            else throw
+                    new RuntimeException();
 
         });
     }
