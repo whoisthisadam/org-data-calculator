@@ -90,7 +90,7 @@
                               <Label layoutX="128.0" layoutY="142.0" prefHeight="27.0" prefWidth="227.0" text="Краткосрочные финансовые вложения" />
                               <Label layoutX="128.0" layoutY="188.0" prefHeight="27.0" prefWidth="260.0" text="Красткосрочная дебиторская задолженность" />
                               <TextField fx:id="shortInvFiled" layoutX="128.0" layoutY="163.0" />
-                              <TextField fx:id="shortRecFiled" layoutX="128.0" layoutY="213.0" />
+                              <TextField fx:id="shortRecField" layoutX="128.0" layoutY="213.0" />
                               <TextField fx:id="shortLiaField" layoutX="128.0" layoutY="269.0" />
                               <Button fx:id="saveLiquiDataBtn" layoutX="147.0" layoutY="312.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Сохранить" />
                            </children>

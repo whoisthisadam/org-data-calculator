@@ -35,7 +35,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static com.chumachenko.orgsinfo.application.StartApp.getPropertiesFromConfig;
 
 public class UserController implements Initializable, Connectionable {
 
@@ -121,7 +120,7 @@ public class UserController implements Initializable, Connectionable {
     @FXML
     public TextField bankrollField;
     @FXML
-    public TextField shortRecFiled;
+    public TextField shortRecField;
     @FXML
     public TextField shortLiaField;
     @FXML
@@ -211,7 +210,7 @@ public class UserController implements Initializable, Connectionable {
         changePasswordLink.setOnAction(this::changePassword);
         organizationsPane.setVisible(false);
         showMyOrgBtn.setOnAction(this::organizations);
-        setContextMenu(listOfOrg);
+        setContextMenuDeleteOrg(listOfOrg);
         userToAdminBtn.setOnAction(this::switchToAdmin);
         listOfOrg.setOnMouseClicked(this::orgOptions);
         orgOptionsPane.setVisible(false);
@@ -469,7 +468,7 @@ public class UserController implements Initializable, Connectionable {
         setListOfOrg();
     }
 
-    public void setContextMenu(ListView listView){
+    public void setContextMenuDeleteOrg(ListView listView){
         MenuItem menuItem=new MenuItem("Удалить");
         ContextMenu contextMenu=new ContextMenu(menuItem);
         listView.setContextMenu(contextMenu);
@@ -520,6 +519,8 @@ public class UserController implements Initializable, Connectionable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        setContextMenuEditLiquiData(calcLiquidBtn, organization);
+        setContextMenuEditSolvencyData(calcSolvencyBtn, organization);
         calcLiquidBtn.setOnAction(event1 -> {
             boolean isThisOrgPresent;
             try {
@@ -585,7 +586,7 @@ public class UserController implements Initializable, Connectionable {
         saveLiquiDataBtn.setOnAction(event2 -> {
             if(
                     bankrollField.getText().isEmpty()||shortLiaField.getText().isEmpty()||
-                            shortRecFiled.getText().isEmpty()||shortInvFiled.getText().isEmpty()
+                            shortRecField.getText().isEmpty()||shortInvFiled.getText().isEmpty()
             ){
                 AlertManager.showAlert(Alert.AlertType.ERROR, saveLiquiDataBtn.getScene().getWindow(),
                         "Ошибка","Заполните все поля"
@@ -595,7 +596,7 @@ public class UserController implements Initializable, Connectionable {
             OrgData orgData=new OrgData();
             orgData.setOrgId(organization[0].getId());
             orgData.setBankroll(Double.parseDouble(bankrollField.getText()));
-            orgData.setShortReceivables(Double.parseDouble(shortRecFiled.getText()));
+            orgData.setShortReceivables(Double.parseDouble(shortRecField.getText()));
             orgData.setShortInvestments(Double.parseDouble(shortInvFiled.getText()));
             orgData.setShortLiabilities(Double.parseDouble(shortLiaField.getText()));
             if(isPresent){
@@ -621,7 +622,7 @@ public class UserController implements Initializable, Connectionable {
             liquidityLabel.setText("Коэффициент общей ликвидности:"+organization[0].getLiquidity().toString());
             bankrollField.setText(" ");
             shortLiaField.setText(" ");
-            shortRecFiled.setText(" ");
+            shortRecField.setText(" ");
             shortInvFiled.setText(" ");
         });
     }
@@ -814,8 +815,34 @@ public class UserController implements Initializable, Connectionable {
                 });
             }
             backFromSearchBtn.setOnAction(event2 ->orgSearchPane.setVisible(false));
-
         });
-
    }
+
+   public void setContextMenuEditLiquiData(Button button, Organization[] organization){
+       MenuItem menuItem=new MenuItem("Редактировать данные");
+       ContextMenu contextMenu=new ContextMenu(menuItem);
+       button.setContextMenu(contextMenu);
+       menuItem.setOnAction(event -> editLiquiData(event, organization));
+   }
+
+    public void editLiquiData(ActionEvent event, Organization[] organization) {
+        addLiquiDataPane.setVisible(true);
+        addLiquiDataPane.setVisible(true);
+        updateLiquiData(organization, organization[0].getName(), true);
+    }
+
+    public void setContextMenuEditSolvencyData(Button button, Organization[] organization){
+        MenuItem menuItem=new MenuItem("Редактировать данные");
+        ContextMenu contextMenu=new ContextMenu(menuItem);
+        button.setContextMenu(contextMenu);
+        menuItem.setOnAction(event -> editSolvencyData(event, organization));
+    }
+
+    public void editSolvencyData(ActionEvent event, Organization[] organization) {
+        addSolvencyDataPane.setVisible(true);
+        addSolvencyDataPane.setVisible(true);
+        updateSolvencyData(organization, organization[0].getName(), true);
+    }
+
+
 }
