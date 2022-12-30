@@ -1,5 +1,5 @@
 
-# Organizations info
+# Organizations data calculator
 A simple desktop application that can calculate liquidity and solvency of organization added by user.
 
 
