@@ -1,6 +1,6 @@
 
 # Organizations info
-A simple application that can calculate liquidity and solvency of organization added by user.
+A simple desktop application that can calculate liquidity and solvency of organization added by user.
 
 
 # Technologies and tools
