@@ -1,4 +1,4 @@
-package com.chumachenko.orgsinfo.repository.role.user;
+package com.chumachenko.orgsinfo.repository.user;
 
 public interface UserTableColumns {
 

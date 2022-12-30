@@ -1,7 +1,7 @@
 package com.chumachenko.orgsinfo.service;
 
-import com.chumachenko.orgsinfo.repository.role.user.UserRepoImpl;
-import com.chumachenko.orgsinfo.repository.role.user.UserRepository;
+import com.chumachenko.orgsinfo.repository.user.UserRepoImpl;
+import com.chumachenko.orgsinfo.repository.user.UserRepository;
 import commands.fromserver.ResponseFromServer;
 import entities.User;
 import exception.NoSuchEntityException;
