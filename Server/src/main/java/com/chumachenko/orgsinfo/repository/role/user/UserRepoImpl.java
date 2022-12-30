@@ -1,4 +1,4 @@
-package com.chumachenko.orgsinfo.repository.user;
+package com.chumachenko.orgsinfo.repository.role.user;
 
 
 import com.chumachenko.orgsinfo.repository.CRUDRepository;
