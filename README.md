@@ -17,7 +17,7 @@ A simple desktop application that can calculate liquidity and solvency of organi
 
 
 
-## Functuonality
+## Functionality
 
 - Login, Registration
 - ### User Features:
