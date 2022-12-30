@@ -2,8 +2,8 @@ package com.chumachenko.orgsinfo.service;
 
 import com.chumachenko.orgsinfo.repository.organization.OrgRepoImpl;
 import com.chumachenko.orgsinfo.repository.organization.OrgRepository;
-import com.chumachenko.orgsinfo.repository.user.UserRepoImpl;
-import com.chumachenko.orgsinfo.repository.user.UserRepository;
+import com.chumachenko.orgsinfo.repository.role.user.UserRepoImpl;
+import com.chumachenko.orgsinfo.repository.role.user.UserRepository;
 import commands.fromserver.ResponseFromServer;
 import entities.Organization;
 

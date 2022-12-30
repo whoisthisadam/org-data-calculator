@@ -8,9 +8,4 @@ public interface OrgDataRepository extends CRUDRepository<Long, OrgData>, AutoCl
     Boolean isThisOrgPresent(Long orgId);
 
     OrgData updateData(OrgData orgData);
-
-//    OrgDataLiquidityDto insertInfoForLiquidity(OrgDataLiquidityDto orgDataLiquidityDto);
-//
-//    OrgDataSolvencyDto insertInfoForSolvency(OrgDataSolvencyDto orgDataSolvencyDto);
-
 }
