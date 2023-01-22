@@ -1,5 +1,6 @@
 package com.chumachenko.orgsinfo.serverinfo;
 
+import com.chumachenko.orgsinfo.config.ConnectedClientConfig;
 import com.chumachenko.orgsinfo.repository.role.user.UserRepoImpl;
 import com.chumachenko.orgsinfo.repository.role.user.UserRepository;
 import com.chumachenko.orgsinfo.service.*;
@@ -18,13 +19,13 @@ import java.io.Serializable;
 public class ClientProcessingThread extends Thread{
 
 
-    private final ConnectedClientInfo clientInfo;
+    private final ConnectedClientConfig clientInfo;
 
     private final ObjectOutputStream objectOutputStream;
 
     private final ObjectInputStream objectInputStream;
 
-    public ClientProcessingThread(ConnectedClientInfo clientInfo) throws IOException {
+    public ClientProcessingThread(ConnectedClientConfig clientInfo) throws IOException {
         this.clientInfo = clientInfo;
         var socket = clientInfo.getConnectionSocket();
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -64,7 +65,7 @@ public class ClientProcessingThread extends Thread{
         super.interrupt();
     }
 
-    public ConnectedClientInfo getClientInfo() {
+    public ConnectedClientConfig getClientInfo() {
         return clientInfo;
     }
 

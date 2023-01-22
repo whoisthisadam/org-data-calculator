@@ -4,12 +4,12 @@ import java.io.IOException;
 
 public class ServerProcessingThread extends Thread {
 
-    private Server server;
+    private ServerConfig server;
 
     public ServerProcessingThread(int port) throws Exception {
 
 
-        server = new Server(port);
+        server = new ServerConfig(port);
     }
 
     @Override

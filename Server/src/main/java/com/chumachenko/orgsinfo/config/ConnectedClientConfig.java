@@ -1,18 +1,18 @@
-package com.chumachenko.orgsinfo.serverinfo;
+package com.chumachenko.orgsinfo.config;
 
 import java.net.Socket;
 
-public class ConnectedClientInfo {
+public class ConnectedClientConfig {
 
     private Socket connectionSocket;
 
     private int idInDB;
 
-    private ConnectedClientInfo() {
+    private ConnectedClientConfig() {
         connectionSocket = new Socket();
     }
 
-    public ConnectedClientInfo(Socket connectionSocket) {
+    public ConnectedClientConfig(Socket connectionSocket) {
         this();
         setConnectionSocket(connectionSocket);
     }

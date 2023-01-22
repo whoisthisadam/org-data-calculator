@@ -1,4 +1,6 @@
-package com.chumachenko.orgsinfo.serverinfo;
+package com.chumachenko.orgsinfo;
+
+import com.chumachenko.orgsinfo.serverinfo.ServerProcessingThread;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

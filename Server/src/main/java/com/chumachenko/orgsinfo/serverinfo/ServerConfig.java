@@ -1,11 +1,13 @@
 package com.chumachenko.orgsinfo.serverinfo;
 
+import com.chumachenko.orgsinfo.config.ConnectedClientConfig;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server {
+public class ServerConfig {
 
     //Порт который будет слушать наш серв
     private int serverPort;
@@ -26,7 +28,7 @@ public class Server {
         }
     };
 
-    public Server(int serverPort) throws Exception {
+    public ServerConfig(int serverPort) throws Exception {
         this.serverPort = serverPort;
         acceptingSocket = new ServerSocket(serverPort);
         processingThreads = new ArrayList<>();
@@ -39,7 +41,7 @@ public class Server {
 
             var newClientSocket = acceptingSocket.accept();
 
-            var newClient = new ConnectedClientInfo(newClientSocket);
+            var newClient = new ConnectedClientConfig(newClientSocket);
 
             var newThread = new ClientProcessingThread(newClient);
 
