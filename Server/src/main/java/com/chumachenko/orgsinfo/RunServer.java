@@ -1,5 +1,6 @@
 package com.chumachenko.orgsinfo;
 
+import com.chumachenko.orgsinfo.config.FlywayMigrationConfig;
 import com.chumachenko.orgsinfo.serverinfo.ServerProcessingThread;
 
 import java.io.FileInputStream;
@@ -45,6 +46,8 @@ public class RunServer {
 
 
         serverProcessingThread.start();
+
+        FlywayMigrationConfig.initialize();
 
 
     }
